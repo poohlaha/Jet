@@ -3,4 +3,4 @@
 
 ## 实现原理
 `Intent → dispatch → action → handler → Page → UI`
-![](./jet.png)
+![](./src/jet/jet.png)
