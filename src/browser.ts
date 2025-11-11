@@ -13,19 +13,28 @@ import { ConsoleLoggerFactory } from './jet/logger/consoleLogger';
 import { CompositeLoggerFactory } from './jet/logger/compositeLogger';
 import { DeferredLoggerFactory } from './jet/logger/deferredLogger';
 import {LOGGER_PREFIX_NAME} from "./jet/types";
+import {setupRuntimeFeatures} from "./jet/logger/runtimeFeatures";
+import {ErrorKitLoggerFactory, setupErrorKit} from "./jet/logger/errorKitLogger";
+import {ERROR_KIT_CONFIG} from "./jet/errorkit";
 
 export async function startApplication(hydrate: boolean = false) {
     console.log(`%c[${LOGGER_PREFIX_NAME}] %cStarting application...`, 'color: green;', 'color:magenta;');
 
     // 日志
+    let logger: any;
+    const onyxFeatures = await setupRuntimeFeatures(
+        new DeferredLoggerFactory(() => logger),
+    );
     const consoleLogger = new ConsoleLoggerFactory();
-    const logger = new CompositeLoggerFactory([
+    const errorKit = setupErrorKit(ERROR_KIT_CONFIG, consoleLogger);
+    logger = new CompositeLoggerFactory([
         consoleLogger,
+        new ErrorKitLoggerFactory(errorKit),
+        ...(onyxFeatures ? [onyxFeatures.recordingLogger] : []),
     ]);
-    const deferredLogger = new DeferredLoggerFactory(() => logger);
 
     // 启动 Jet Runtime
-    const jet = bootstrap(deferredLogger, LOGGER_PREFIX_NAME)
+    const jet = bootstrap(logger, LOGGER_PREFIX_NAME)
 
     // 初始化 Svelte 组件
     const container = document.getElementById('app')
@@ -42,7 +51,7 @@ export async function startApplication(hydrate: boolean = false) {
     // 注册 ActionHandlers
     registerActionHandlers({
         jet,
-        logger: deferredLogger,
+        logger,
         updateApp: (props: any) => {
             console.log(`%c[${LOGGER_PREFIX_NAME}] %cupdateApp ->`, 'color:green;', 'color: blue;', props);
             app.$set(props);
