@@ -4,7 +4,7 @@
  * @author poohlaha
  * @description 根据 action.payload.route 返回不同的 Page 或返回另一个 ActionModel（用于委托处理，例如打开外部 URL）
  */
-import {Dependencies, LOGGER_PREFIX_NAME} from "../types";
+import {Dependencies, LOGGER_PREFIX_NAME, PERFORMED} from "../types";
 import {makeFlowIntent} from "../tools/intent";
 import {PAGE_ACTION_KIND} from "./pageHandler";
 
@@ -47,7 +47,7 @@ export async function registerHandler(dependencies: Dependencies) {
         });
 
         isFirstPage = true;
-        return 'performed'
+        return PERFORMED
     });
 
     // 浏览器前进/后退

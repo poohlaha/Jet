@@ -32,22 +32,22 @@ export class RecordingLogger implements Logger {
 
     info(...args: any[]) {
         this.record('info', args);
-        console.log(`%c${this.source}`, 'color: green;', ...args);
+        // console.log(`%c${this.source}`, 'color: green;', ...args);
     }
 
     warn(...args: any[]) {
         this.record('warn', args);
-        console.warn(`%c${this.source}`, 'color: orange;', ...args);
+        // console.warn(`%c${this.source}`, 'color: orange;', ...args);
     }
 
     error(...args: any[]) {
         this.record('error', args);
-        console.error(`%c${this.source}`, 'color: red;', ...args);
+        // console.error(`%c${this.source}`, 'color: red;', ...args);
     }
 
     debug(...args: any[]) {
         this.record('debug', args);
-        console.debug(`%c${this.source}`, 'color: gray;', ...args);
+        // console.debug(`%c${this.source}`, 'color: gray;', ...args);
     }
 }
 

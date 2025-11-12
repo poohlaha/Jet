@@ -15,7 +15,7 @@ export function registerHandler(dependencies: Dependencies) {
     /*
     jet.onAction('ExternalUrlAction', async (action: any) => {
         logger.info('received external URL action:', action);
-        return 'performed';
+        return PERFORMED;
     });
      */
 }

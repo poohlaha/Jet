@@ -28,7 +28,7 @@ export async function registerHandler(dependencies: Dependencies) {
             });
         }
 
-        return 'performed';
+        return PERFORMED;
     });
      */
 }

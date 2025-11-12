@@ -10,6 +10,7 @@ import { ConsoleMetrics } from './jet/tools/metrics';
 import { browserRuntime } from './jet/tools/runtime';
 import { pageHandler, PAGE_ACTION_KIND } from './jet/handlers/pageHandler'
 import {LoggerFactory} from "./jet/logger/logger";
+import {PERFORMED} from "./jet/types";
 
 export function bootstrap(loggerFactory: LoggerFactory, loggerPrefixName = '') {
     const dispatcher = new ActionDispatcher();
@@ -21,9 +22,9 @@ export function bootstrap(loggerFactory: LoggerFactory, loggerPrefixName = '') {
     // metrics
     const consoleMetrics = new ConsoleMetrics(loggerFactory)
 
-    const jet = new Jet({
+    const jet = Jet.load({
         dispatcher,
-        logger: loggerFactory,
+        loggerFactory,
         metrics: consoleMetrics,
         runtime: browserRuntime,
     });
@@ -32,7 +33,7 @@ export function bootstrap(loggerFactory: LoggerFactory, loggerPrefixName = '') {
     jet.onAction = (kind: string, handler: Function) => {
         dispatcher.register(kind, async (action) => {
             await handler(action);
-            return 'performed';
+            return PERFORMED;
         });
     };
 

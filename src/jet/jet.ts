@@ -13,21 +13,23 @@
  * 错误处理: 不直接抛出而是转为 ErrorPage，这样 UI 层的 {#await} 可以在 then 分支拿到 ErrorPage，保持渲染路径一致（正如你最初代码中的 transformRejectionIntoErrorPage 的思路）。
  * nested action support：允许 handler 返回另一个 action ($kind) 以委托进一步处理，便于 handler 组合（示例：flow-handler 可返回 externalUrlAction，由另一个 handler 处理）
  */
-import type { Intent, Page, ActionModel } from './types';
-import { ActionDispatcher } from './actionDispatcher';
-import { makeErrorPage } from './tools/errorPage';
-import type { Logger } from './tools/logger';
-import type { Metrics } from './tools/metrics';
-import type { Runtime } from './tools/runtime';
+import type {ActionModel, Intent, Page} from './types';
+import {LOGGER_PREFIX_NAME, PERFORMED} from "./types";
+import {ActionDispatcher} from './actionDispatcher';
+import {makeErrorPage} from './tools/errorPage';
+import type {Logger} from './logger/logger';
 import {LoggerFactory} from "./logger/logger";
+import type {Metrics} from './tools/metrics';
+import type {Runtime} from './tools/runtime';
 
 export type JetOptions = {
     dispatcher: ActionDispatcher; // handler registry/执行器
-    logger?: LoggerFactory; // 记录日志（默认为 console）
+    logger: Logger; // 记录日志（默认为 console）
     metrics?: Metrics; // 记录耗时（默认为 consoleMetrics）
     runtime?: Runtime; // 注入运行时信息
     prefetched?: Map<string, Page>; // 支持注入 SSR 的预取结果
 };
+
 
 export class Jet {
     private readonly dispatcher: ActionDispatcher; // 保存传入的 dispatcher
@@ -37,7 +39,32 @@ export class Jet {
     private prefetched: Map<string, Page>; // Map, 用于在 dispatch 时检查是否已有预取的 page
     private navToken = 0; // 数字计数器，每次导航增加，协助判断“是否是最新导航”
 
-    private updateApp?: (props: any) => void;
+    static load({
+         dispatcher,
+         loggerFactory,
+         metrics,
+         runtime,
+         prefetched
+    }: {
+        dispatcher: ActionDispatcher,
+        loggerFactory: LoggerFactory,
+        metrics?: Metrics,
+        runtime: Runtime,
+        prefetched?: Map<string, Page>
+    }) {
+
+        let jet: Jet;
+
+        jet = new Jet({
+            dispatcher,
+            logger: loggerFactory.loggerFor(LOGGER_PREFIX_NAME),
+            metrics,
+            runtime,
+            prefetched
+        })
+
+        return jet;
+    }
 
     constructor(options: JetOptions) {
         this.dispatcher = options.dispatcher;
@@ -63,6 +90,12 @@ export class Jet {
                 // Map intent -> action model (simple mapping)
                 const action: ActionModel = { $kind: intent.kind, payload: intent.payload };
                 const outcome = await this.dispatcher.perform(action);
+
+                if (outcome === PERFORMED) {
+                    this.logger.info(`${intent.kind} performed`);
+                    // 返回一个特殊的“空页面”占位（不触发错误页）
+                    return { type: 'noop', title: '', component: null } as any;
+                }
 
                 // Handler may return a Page directly, or { page } envelope, or another action
                 if (outcome && typeof outcome === 'object') {
@@ -96,8 +129,7 @@ export class Jet {
 
     // 提供 nav token 生成与比较，用在 UI 层（比如 PageResolver 或上层导航状态）以确保只有最新的导航结果更新 UI，从而避免竞态问题（旧 promise 晚到覆盖新页面/导航）
     nextNavToken() {
-        const token = ++this.navToken;
-        return token;
+        return ++this.navToken;
     }
 
     isLatestNav(token: number) {
@@ -106,7 +138,7 @@ export class Jet {
 
     // 注册 Action Handler
     onAction(kind: string, handler: (action: any) => Promise<any> | any) {
-        this.logger.info('[Jet] registering handler for', kind);
+        this.logger.info(`[${LOGGER_PREFIX_NAME} onAction] registering handler for`, kind);
         this.dispatcher.register(kind, async (action) => {
             try {
                 // 执行 handler
@@ -116,9 +148,10 @@ export class Jet {
                 if (result && typeof result === 'object' && 'type' in result) {
                     return result;
                 }
-                return result ?? 'performed';
+
+                return result ?? PERFORMED;
             } catch (err) {
-                this.logger.error('[Jet.onAction] handler failed', kind, err);
+                this.logger.error(`[${LOGGER_PREFIX_NAME} onAction] handler failed`, kind, err);
                 return makeErrorPage(err);
             }
         });

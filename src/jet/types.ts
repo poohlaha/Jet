@@ -38,3 +38,5 @@ export interface Dependencies {
 }
 
 export const LOGGER_PREFIX_NAME = 'Jet'
+
+export const PERFORMED = Symbol('performed')

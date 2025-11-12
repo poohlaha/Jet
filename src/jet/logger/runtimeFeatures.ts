@@ -17,17 +17,17 @@ export async function setupRuntimeFeatures(
 }> {
     const recordingLogger = new RecordingLoggerFactory();
 
+    (window as any).__JET__LOGS__ = {
+        export: () => recordingLogger.exportLogs(),
+        clear: () => recordingLogger.clear(),
+    };
+
     // 等待下一 tick，确保 logger 已准备
     await Promise.resolve();
 
     try {
         const log = logger.loggerFor(`${LOGGER_PREFIX_NAME} RuntimeFeatures`);
         log.info('Setting up runtime features...');
-
-        (window as any).JetLogs = {
-            export: () => recordingLogger.exportLogs(),
-            clear: () => recordingLogger.clear(),
-        };
 
         log.info('Runtime features ready, RecordingLoggerFactory initialized ✅');
     } catch {

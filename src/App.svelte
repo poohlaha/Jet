@@ -51,34 +51,13 @@
         jet.__app?.$set({ page, isFirstPage });
     }
 
-    /*
-    $: {
-        const route = window.location.pathname || '/';
-        loadRoute(route);
-    }
-     */
-
     // 进行 pushState 并重新 dispatch
     function goto(route: string) {
         history.pushState({}, '', route);
 
         console.log('%c[App] loadRoute ->', 'color:green;', route);
-        console.log('%c[App] jet', 'color:green;', jet);
         jet.dispatch(makeFlowIntent(route));
-        // loadRoute(route);
     }
-
-    /*
-    onMount(() => {
-        registerApp?.({
-            $set: (values: any) => {
-                page = values.page;
-                isFirstPage = values.isFirstPage;
-            },
-        });
-        console.log('[App] registerApp 调用完成');
-    });
-     */
 </script>
 
 <div class="app-container" data-testid="app-container">
