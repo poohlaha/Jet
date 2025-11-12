@@ -30,10 +30,10 @@ export class ConsoleMetrics {
     const t0 = performance.now();
     try {
       const r = await fn();
-      this.log.info(name, `${performance.now() - t0}ms`);
+      this.log.info(name, `${(performance.now() - t0).toFixed(2)}ms`);
       return r;
     } catch (e) {
-      this.log.error(name, 'failed', `${performance.now() - t0}ms`);
+      this.log.error(name, 'failed', `${(performance.now() - t0).toFixed(2)}ms`);
       throw e;
     }
   }

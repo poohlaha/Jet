@@ -13,7 +13,7 @@ import { ConsoleLoggerFactory } from './jet/logger/consoleLogger';
 import { CompositeLoggerFactory } from './jet/logger/compositeLogger';
 import { DeferredLoggerFactory } from './jet/logger/deferredLogger';
 import {LOGGER_PREFIX_NAME} from "./jet/types";
-import {setupRuntimeFeatures} from "./jet/logger/runtimeFeatures";
+import {setupRuntimeFeatures} from "./jet/utils/features/runtime";
 import {ErrorKitLoggerFactory, setupErrorKit} from "./jet/logger/errorKitLogger";
 import {ERROR_KIT_CONFIG} from "./jet/errorkit";
 
