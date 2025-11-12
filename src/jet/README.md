@@ -4,3 +4,25 @@
 ## 实现原理
   `Intent → dispatch → action → handler → Page → UI`
   ![](./jet.png)
+  
+## 执行过程
+   `goto → dispatch → flow action → page action → update app → metrics`
+   ```
+    goto(route)
+        ↓
+    jet.dispatch(intent)                     ← intent.kind = "flowAction" {kind: 'flowAction', payload: {route: '/about'}}  
+        ↓
+    ActionDispatcher.perform(action)         ← 找到已注册的 handler（flowActionHandler）
+        ↓
+    flowActionHandler(...)                   ← 调用 flow-action.ts 中注册的处理器
+        ↓
+    flowActionHandler 内部再调用 jet.dispatch(pageIntent)
+        ↓
+    pageHandler(...)                         ← 真正根据 route 找到并加载页面模块
+        ↓
+    updateApp({ page, isFirstPage })         ← 通知 Svelte App 更新 props
+        ↓
+    app.$set(props) → Svelte 渲染 → PageResolver.svelte
+        ↓
+    metrics.asyncTime                        ← 记录 dispatch 性能时间    
+   ```

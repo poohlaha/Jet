@@ -27,13 +27,13 @@ export class ConsoleMetrics {
   }
 
   async asyncTime(name: string, fn: any) {
-    const t0 = Date.now();
+    const t0 = performance.now();
     try {
       const r = await fn();
-      this.log.info(name, `${Date.now() - t0}ms`);
+      this.log.info(name, `${performance.now() - t0}ms`);
       return r;
     } catch (e) {
-      this.log.error(name, 'failed', `${Date.now() - t0}ms`);
+      this.log.error(name, 'failed', `${performance.now() - t0}ms`);
       throw e;
     }
   }

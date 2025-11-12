@@ -38,19 +38,6 @@
         })();
     }
 
-    function loadRoute(route: string) {
-        console.log('%c[App] loadRoute ->', 'color:green;', route);
-        const intent = makeFlowIntent(route);
-
-        // 调用 dispatch 并更新 page
-        const result = jet.dispatch(intent);
-        page = transformRejectionIntoErrorPage(result);
-        isFirstPage = false;
-
-        // 同步更新 App 自身（触发重新渲染）
-        jet.__app?.$set({ page, isFirstPage });
-    }
-
     // 进行 pushState 并重新 dispatch
     function goto(route: string) {
         history.pushState({}, '', route);

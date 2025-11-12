@@ -14,6 +14,8 @@ import {PERFORMED} from "./jet/types";
 
 export function bootstrap(loggerFactory: LoggerFactory, loggerPrefixName = '') {
     const dispatcher = new ActionDispatcher();
+
+    // 注册 Page Action
     dispatcher.register(PAGE_ACTION_KIND, pageHandler)
 
     // log

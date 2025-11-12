@@ -1,5 +1,5 @@
 /**
- * @fileOverview 基础层，打印到控制台
+ * @fileOverview 运行时环境初始化模块
  * @date 2025-11-07
  * @author poohlaha
  * @description
@@ -28,8 +28,7 @@ export async function setupRuntimeFeatures(
     try {
         const log = logger.loggerFor(`${LOGGER_PREFIX_NAME} RuntimeFeatures`);
         log.info('Setting up runtime features...');
-
-        log.info('Runtime features ready, RecordingLoggerFactory initialized ✅');
+        log.info('Runtime features ready, RecordingLoggerFactory initialized');
     } catch {
         console.warn(`%c[${LOGGER_PREFIX_NAME} RuntimeFeatures]%c logger not yet ready, continuing...`, 'color: green;', 'color: orange;');
     }
