@@ -12,7 +12,7 @@ import {
 import { enableLogger } from './logger';
 import { baseConfig, beforeHooksOptions } from './config';
 import { __SENTRY_DEBUG__ } from './types';
-import { SentryKitUserOptions } from './transports/types';
+import type { SentryKitUserOptions } from './transports/types';
 
 /**
  * 1. 检查 SDK 版本是否兼容（与 SUPPORTED_SENTRY_VERSION 对比）
@@ -29,6 +29,7 @@ checkSentrySDKCompatibility();
  * - 校验 project / tracesTopic / tracesSampling
  * - 校验配置来源是否合法
  */
+
 export function createSentryConfig(userOptions: SentryKitUserOptions) {
 	// 1. 用户启用 debug 时，打开内部日志
 	if ((typeof __SENTRY_DEBUG__ === 'undefined' || __SENTRY_DEBUG__) && userOptions.debug) {
@@ -71,4 +72,5 @@ export const SentryKit = {
 	createSentryConfig
 };
 
+export type { SentryKitUserOptions };
 export default SentryKit;

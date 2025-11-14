@@ -7,7 +7,7 @@
 import type { Logger, LoggerFactory } from '../logger';
 import { LOGGER_PREFIX_NAME } from '../../types';
 import { ErrorHub } from './types';
-import { SentryKitUserOptions } from '../../../sentrykit/transports/types';
+import { SentryKitUserOptions } from '../../../sentrykit';
 
 export type PartialSentryModule = {
 	captureException: (err: any) => void;

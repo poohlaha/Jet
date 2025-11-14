@@ -1,11 +1,11 @@
-import { SentryKitUserOptions } from './sentrykit/transports/types';
-
 /**
  * @fileOverview 错误日志属性
  * @date 2025-11-07
  * @author poohlaha
  * @description
  */
+import { SentryKitUserOptions } from '../sentrykit';
+
 const APPS_PROD_SUBDOMAIN = ['apps'];
 const PROJECT_ID = 'onyx_apps';
 
