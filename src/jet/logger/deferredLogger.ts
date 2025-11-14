@@ -7,10 +7,9 @@
 import type { LoggerFactory, Logger } from './logger';
 
 export class DeferredLoggerFactory implements LoggerFactory {
+	constructor(private resolver: () => LoggerFactory) {}
 
-    constructor(private resolver: () => LoggerFactory) {}
-
-    loggerFor(name: string): Logger {
-        return this.resolver().loggerFor(name);
-    }
+	loggerFor(name: string): Logger {
+		return this.resolver().loggerFor(name);
+	}
 }

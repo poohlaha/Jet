@@ -7,16 +7,15 @@
 import type { Logger, LoggerFactory } from './logger';
 
 export class CompositeLoggerFactory implements LoggerFactory {
+	constructor(private readonly factories: LoggerFactory[]) {}
 
-    constructor(private readonly factories: LoggerFactory[]) {}
-
-    loggerFor(name: string): Logger {
-        const loggers = this.factories.map(f => f.loggerFor(name));
-        return {
-            info: (...args) => loggers.forEach(l => l.info(...args)),
-            warn: (...args) => loggers.forEach(l => l.warn(...args)),
-            error: (...args) => loggers.forEach(l => l.error(...args)),
-            debug: (...args) => loggers.forEach(l => l.debug(...args)),
-        };
-    }
+	loggerFor(name: string): Logger {
+		const loggers = this.factories.map((f) => f.loggerFor(name));
+		return {
+			info: (...args) => loggers.forEach((l) => l.info(...args)),
+			warn: (...args) => loggers.forEach((l) => l.warn(...args)),
+			error: (...args) => loggers.forEach((l) => l.error(...args)),
+			debug: (...args) => loggers.forEach((l) => l.debug(...args))
+		};
+	}
 }

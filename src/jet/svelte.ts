@@ -9,7 +9,13 @@ import type { Jet } from './jet';
 const KEY = 'jet';
 
 // 顶层（bootstrap/主入口）调用，使用 setContext(KEY, jet) 把 jet 放入 Svelte 的上下文树
-export function setJetContext(jet: Jet) { setContext(KEY, jet); }
+export function setJetContext(jet: Jet) {
+	setContext(KEY, jet);
+}
 
 // 在任何子组件调用，返回注入的 Jet 实例；若不存在则抛错 Jet not found，提示忘了在 root 注入。
-export function getJet(): Jet { const j = getContext<Jet>(KEY); if (!j) throw new Error('Jet not found in context'); return j; }
+export function getJet(): Jet {
+	const j = getContext<Jet>(KEY);
+	if (!j) throw new Error('Jet not found in context');
+	return j;
+}

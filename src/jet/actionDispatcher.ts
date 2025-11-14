@@ -10,17 +10,17 @@ import type { ActionModel } from './types';
 export type ActionHandler = (action: ActionModel) => Promise<any> | any;
 
 export class ActionDispatcher {
-    private handlers = new Map<string, ActionHandler>();
+	private handlers = new Map<string, ActionHandler>();
 
-    register(kind: string, handler: ActionHandler) {
-        this.handlers.set(kind, handler);
-    }
+	register(kind: string, handler: ActionHandler) {
+		this.handlers.set(kind, handler);
+	}
 
-    async perform(action: ActionModel) {
-        const handler = this.handlers.get(action.$kind);
-        if (!handler) {
-            throw new Error(`No handler for action kind ${action.$kind}`);
-        }
-        return await handler(action);
-    }
+	async perform(action: ActionModel) {
+		const handler = this.handlers.get(action.$kind);
+		if (!handler) {
+			throw new Error(`No handler for action kind ${action.$kind}`);
+		}
+		return await handler(action);
+	}
 }

@@ -10,12 +10,12 @@
  * DeferredLoggerFactory: 延迟创建 logger（防止循环依赖）
  */
 export interface Logger {
-    info(...args: any[]): void;
-    warn(...args: any[]): void;
-    error(...args: any[]): void;
-    debug(...args: any[]): void;
+	info(...args: any[]): void;
+	warn(...args: any[]): void;
+	error(...args: any[]): void;
+	debug(...args: any[]): void;
 }
 
 export interface LoggerFactory {
-    loggerFor(name: string): Logger;
+	loggerFor(name: string): Logger;
 }

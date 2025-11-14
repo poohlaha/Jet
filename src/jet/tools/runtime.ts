@@ -5,13 +5,13 @@
  * @description 通过依赖注入的 runtime，可以用相同 Jet 代码在 SSR 与 client 之间运行（server 传入 server runtime）
  */
 export interface Runtime {
-    isServer: boolean;
-    isClient: boolean;
-    platform?: string;
+	isServer: boolean;
+	isClient: boolean;
+	platform?: string;
 }
 
 export const browserRuntime: Runtime = {
-    isServer: typeof window === 'undefined',
-    isClient: typeof window !== 'undefined',
-    platform: typeof navigator !== 'undefined' ? navigator.userAgent : 'server'
-}
+	isServer: typeof window === 'undefined',
+	isClient: typeof window !== 'undefined',
+	platform: typeof navigator !== 'undefined' ? navigator.userAgent : 'server'
+};

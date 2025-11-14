@@ -4,14 +4,14 @@
  * @author poohlaha
  * @description
  */
-import {Dependencies} from "../types";
+import { Dependencies } from '../types';
 
 export async function registerHandler(dependencies: Dependencies) {
-    const { jet, logger } = dependencies;
+	const { jet, logger } = dependencies;
 
-    const log = logger.loggerFor('jet/handlers/compoundAction')
+	const log = logger.loggerFor('jet/handlers/compoundAction');
 
-    /*
+	/*
     jet.onAction('compoundAction', async (action: any) => {
         log.info('received CompoundAction:', action);
 

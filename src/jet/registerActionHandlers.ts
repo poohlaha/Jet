@@ -4,14 +4,14 @@
  * @author poohlaha
  * @description 统一注册所有 Action Handler（flowAction、externalUrlAction、compoundAction 等）。
  */
-import {Dependencies} from "./types";
+import { Dependencies } from './types';
 
-import { registerHandler as registerFlowActionHandler } from './handlers/flowAction'
-import { registerHandler as registerExternalURLActionHandler } from './handlers/externalUrlAction'
-import { registerHandler as registerCompoundActionHandler } from './handlers/compoundAction'
+import { registerHandler as registerFlowActionHandler } from './handlers/flowAction';
+import { registerHandler as registerExternalURLActionHandler } from './handlers/externalUrlAction';
+import { registerHandler as registerCompoundActionHandler } from './handlers/compoundAction';
 
 export function registerActionHandlers(dependencies: Dependencies) {
-    registerCompoundActionHandler(dependencies);
-    registerFlowActionHandler(dependencies);
-    registerExternalURLActionHandler(dependencies);
+	registerCompoundActionHandler(dependencies);
+	registerFlowActionHandler(dependencies);
+	registerExternalURLActionHandler(dependencies);
 }

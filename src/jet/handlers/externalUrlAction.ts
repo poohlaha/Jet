@@ -5,14 +5,14 @@
  * @description
  */
 
-import {Dependencies} from "../types";
+import { Dependencies } from '../types';
 
 export function registerHandler(dependencies: Dependencies) {
-    const { jet, logger } = dependencies;
+	const { jet, logger } = dependencies;
 
-    const log = logger.loggerFor('jet/handlers/externalUrlAction')
+	const log = logger.loggerFor('jet/handlers/externalUrlAction');
 
-    /*
+	/*
     jet.onAction('ExternalUrlAction', async (action: any) => {
         logger.info('received external URL action:', action);
         return PERFORMED;
