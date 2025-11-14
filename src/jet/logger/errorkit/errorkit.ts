@@ -7,7 +7,7 @@
 import type { Logger, LoggerFactory } from '../logger';
 import { LOGGER_PREFIX_NAME } from '../../types';
 import { ErrorHub } from './types';
-import { SentryKitUserOptions } from '../../sentrykit/transports/types';
+import { SentryKitUserOptions } from '../../../sentrykit/transports/types';
 
 export type PartialSentryModule = {
 	captureException: (err: any) => void;
@@ -38,7 +38,7 @@ export const setupErrorKit = (
 		let sentry: PartialSentryModule | null = null;
 		if (isErrorKitEnabled) {
 			try {
-				const { createSentryConfig } = await import('../../sentrykit');
+				const { createSentryConfig } = await import('../../../sentrykit');
 				const Sentry = await import('@sentry/browser');
 				Sentry.init(createSentryConfig(config));
 
