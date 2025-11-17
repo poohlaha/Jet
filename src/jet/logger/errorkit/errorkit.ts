@@ -67,7 +67,7 @@ class ErrorKit implements ErrorHub {
 		this.isErrorKitEnabled = isErrorKitEnabled;
 
 		if (!isErrorKitEnabled) {
-			log.debug('errorkit is disabled');
+			log.debug('ErrorKit is disabled');
 		}
 	}
 
