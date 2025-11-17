@@ -1,5 +1,5 @@
 /**
- * @fileOverview sentrykit 入口
+ * @fileOverview SentryKit 入口
  * @date 2025-11-07
  * @author poohlaha
  * @description
@@ -43,6 +43,7 @@ export function createSentryConfig(userOptions: SentryKitUserOptions) {
 	}
 
 	// 3. trace 配置完整性检查
+	// 双向一致性校验: 开启 trace(性能监控), 那必须配置 trace 的 topic; 如果配置了 trace 的 topic，那必须开启 trace
 	const hasTracesConfig = config.tracesSampleRate || config.tracesSampler;
 	const hasTracesTopic = config.topic.traces;
 	if (hasTracesConfig && !hasTracesTopic) {
@@ -50,6 +51,7 @@ export function createSentryConfig(userOptions: SentryKitUserOptions) {
 			'[SentryKit Configuration Error]: The `topic.traces` field is not set while trace sampling is configured.'
 		);
 	}
+
 	if (hasTracesTopic && !hasTracesConfig) {
 		throw new Error(
 			'[SentryKit Configuration Error]: Trace sampling is configured but `topic.traces` is not set.'

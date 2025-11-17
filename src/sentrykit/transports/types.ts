@@ -69,13 +69,13 @@ export interface SentryKitConfig extends SentryKitUserOptions {
 	// 明确环境为 prod | qa(此时已确定)
 	environment: 'prod' | 'qa';
 
-	// 明确 ingestUrl
+	// SDK 把事件上传到服务器的 URL
 	ingestUrl: string;
 
 	// 完整隐私规则（经过合并与生成）
 	privacyRules: PrivacyRule[];
 
-	// 强制转化为对象形式
+	// 事件所属的分类, 发送到后端时使用的 Kafka Topic/日志 Topic 名字, 强制转化为对象形式
 	topic: { error: string; traces: string };
 
 	// Transport 函数(makeTransport)

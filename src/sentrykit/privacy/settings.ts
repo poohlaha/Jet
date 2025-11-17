@@ -1,8 +1,12 @@
 /**
- * @fileOverview 从配置生成隐私规则
+ * @fileOverview 隐私开关、选项、策略
  * @date 2025-11-07
  * @author poohlaha
- * @description
+ * @description 提供 `隐私规则的配置入口`
+ * - 是否启用 URL 参数过滤？
+ * - 是否采集完整 URL？还是仅域名？
+ * - 是否上传 request body？
+ * - 是否启用字段白名单模式？
  */
 import { createLogger } from '../logger';
 import { __SENTRY_DEBUG__ } from '../types';

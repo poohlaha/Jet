@@ -88,7 +88,7 @@ export function monitorSentryConfig(config: SentryKitExtendedConfig): SentryKitE
 	return config;
 }
 
-// Hook 住 hub.bindClient，使得每次绑定 client 时都检查 SentryKit 配置是否正确
+// Hook 住 hub.bindClient，使得每次绑定 client 时都检查 SentryKit 配置是否正确(生产环境需要关闭, 防止性能损耗)
 export function monitorSentryHubBindClient() {
 	const hub = getCurrentHub();
 	const originalBindClient = hub.bindClient;

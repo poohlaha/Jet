@@ -15,12 +15,6 @@ export type PartialSentryModule = {
 	addBreadcrumb: (crumb: any) => void;
 };
 
-export interface ErrorKitConfig {
-	dsn?: string;
-	release?: string;
-	env?: string;
-}
-
 export type ErrorKitInstance = InstanceType<typeof ErrorKit>;
 
 export const setupErrorKit = (

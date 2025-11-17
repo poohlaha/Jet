@@ -1,5 +1,5 @@
 /**
- * @fileOverview 基础
+ * @fileOverview Transport 的抽象基类
  * @date 2025-11-13
  * @author poohlaha
  * @description

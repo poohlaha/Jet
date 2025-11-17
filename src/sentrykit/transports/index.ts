@@ -4,13 +4,13 @@
  * @author poohlaha
  * @description
  */
-import { processForPrivacy } from './privacy/rules';
+import { processForPrivacy } from '../privacy/rules';
 import { Envelope, supportsFetch } from '@sentry/core';
-import { checkEnvelopeSentrySDKCompatibility } from './utils';
-import { envelopeToIngestionEvents } from './ingestion-event';
-import { makeFetchTransport } from './transports/fetch';
-import { makeXHRTransport } from './transports/xhr';
-import { TransportOptions, TransportRequest } from './transports/base';
+import { checkEnvelopeSentrySDKCompatibility } from '../utils';
+import { envelopeToIngestionEvents } from '../ingestion-event';
+import { makeFetchTransport } from './fetch';
+import { makeXHRTransport } from './xhr';
+import { TransportOptions } from './base';
 
 /**
  * 构造 SentryKit 私有 Ingest URL。
@@ -27,15 +27,47 @@ export function createTransportUrl(ingestUrl: string, topic: string): string {
 }
 
 /**
- * 生成 SentryKit 专用 Transport。
+ * 生成 SentryKit 专用 Transport
  * 它会覆盖 options.getRequest，使 createTransport() 能正确构造 Request。
+ *
+ * transport.send(envelope) 流程:
+ * - 发送前检查 rate limit
+ * - 筛选 envelope item
+ * - 调用 options.getRequest(envelope)
+ *   - 调用在 makeTransport 里定义的 getRequest：
+ *     - 检查 SDK 版本
+ *     - 转 ingestion events
+ *     - 执行 processForPrivacy
+ *     - 生成 URL + body + headers
+ * - makeRequest(request)
+ *   - fetch：执行 fetch
+ *   - XHR：执行 XMLHttpRequest
+ * - 发送完成后：
+ *   - 更新 rate limits
+ *   - 返回 promise(resolvedSyncPromise / rejectedSyncPromise)
+ *
+ * 异步 buffer 控制
+ *   - transport 内部有一个 buffer(promise buffer):
+ *     - 事件进入 buffer 队列
+ *     - 可以控制同时发送的请求数，防止短时间大量事件压垮服务器
+ *   - buffer 会在队列满、或请求失败时
+ *     - 标记事件丢失(queue_overflow / network_error)
+ *     - 避免 crash
+ *
+ * 响应处理
+ *   - 事件发送成功
+ *     - 更新 rate limit(X-Sentry-Rate-Limits / Retry-After)
+ *     - promise resolve
+ *   - 事件发送失败
+ *     - 调用 recordDroppedEvent(记录丢失事件)
+ *     - promise reject 或 resolve(取决于 error 类型)
  */
 export function makeTransport(options: TransportOptions) {
 	/**
 	 * getRequest: envelope -> TransportRequest
 	 *
 	 * 此方法会被 createTransport() 调用
-	 * 这里将 envelope 转换成自定义 ingestion payload：
+	 * 这里将 envelope 转换成自定义 ingestion payload:
 	 *
 	 *   { events: [...] }
 	 *

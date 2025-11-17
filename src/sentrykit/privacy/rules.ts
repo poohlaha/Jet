@@ -1,8 +1,12 @@
 /**
- * @fileOverview 深度脱敏引擎
+ * @fileOverview 隐私规则定义与实现
  * @date 2025-11-07
  * @author poohlaha
- * @description
+ * @description 定义 `哪些字段必须被隐藏、裁剪、模糊`
+ * - PII 字段列表
+ * - 特殊字段的替换规则(如 email → [filtered])
+ * - URL 参数过滤规则(例如: secret, password, token 会被移除)
+ * - HTTP body 的裁剪(尤其 JSON body)
  */
 import { createLogger } from '../logger';
 import { __SENTRY_DEBUG__ } from '../types';
@@ -19,8 +23,6 @@ export type VisitAction = void | 'remove';
 
 // 回调函数类型
 export type VisitCallback = (ctx: VisitContext) => VisitAction;
-
-export type RuleType = 'url' | 'url-query' | 'timestamp' | string;
 
 // 匹配路径时的上下文信息
 export interface MatchPathFnContext {

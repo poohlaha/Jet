@@ -18,6 +18,9 @@ import { setupErrorKit } from './jet/logger/errorkit/errorkit';
 import { ERROR_KIT_CONFIG } from './jet/errorkit';
 import { ErrorKitLoggerFactory } from './jet/logger/errorkit/errorKitLogger';
 
+import Test from './sentrykit/__test__/index';
+import { runSentryKitQATest } from './sentrykit/__test__/qa';
+
 export async function startApplication(hydrate: boolean = false) {
 	console.log(
 		`%c[${LOGGER_PREFIX_NAME}] %cStarting application...`,
@@ -72,4 +75,6 @@ export async function startApplication(hydrate: boolean = false) {
 	await jet.dispatch(initialIntent);
 
 	console.log(`%c[${LOGGER_PREFIX_NAME}] %cApplication ready`, 'color: green;', 'color: magenta;');
+
+	await Test();
 }

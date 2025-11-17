@@ -1,5 +1,5 @@
 /**
- * @fileOverview 类型定义
+ * @fileOverview 所有隐私配置的类型声明
  * @date 2025-11-07
  * @author poohlaha
  * @description

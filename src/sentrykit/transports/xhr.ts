@@ -1,8 +1,11 @@
 /**
- * @fileOverview 旧版浏览器请求
+ * @fileOverview XMLHttpRequest 实现
  * @date 2025-11-13
  * @author poohlaha
- * @description
+ * @description 提供 fetch 的替代版本
+ * - 某些系统环境没有 fetch
+ * - 某些 CSP 限制 fetch
+ * - 内部框架可能需要 sync XHR
  */
 import { createTransport, TransportOptions, TransportRequest, TransportResponse } from './base';
 

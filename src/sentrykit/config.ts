@@ -3,14 +3,25 @@
  * @date 2025-11-07
  * @author poohlaha
  * @description
+ * - 合并用户配置与默认配置
+ * - 应用隐私设置
+ * - 应用 transport 相关设置
+ * - 决定 “是否启用 fetch？是否启用 XHR？”
  */
 import { SDK_VERSION } from '@sentry/browser';
 import { isHeadlessBrowser } from './utils';
 import { createPrivacyRulesFrom } from './privacy/settings';
 import { createLogger } from './logger';
-import { makeTransport } from './transport';
+import { makeTransport } from './transports';
 import { SentryKitConfig, SentryKitUserOptions } from './transports/types';
-import { __SENTRY_DEBUG__, INGEST_URLS, SUPPORTED_SENTRY_VERSION } from './types';
+import {
+	__SENTRY_DEBUG__,
+	DEFAULT_DSN,
+	DEFAULT_ENVIRONMENT,
+	DEFAULT_TOPIC,
+	INGEST_URLS,
+	SUPPORTED_SENTRY_VERSION
+} from './types';
 
 const debug = createLogger('[SentryKit Config]');
 
@@ -84,7 +95,7 @@ type SentryKitConfigIntermediate = Omit<SentryKitConfig, 'topic'> & {
 };
 
 /**
- * 生成最终的 SentryKit Config。
+ * 根据用户配置, 生成最终的 SentryKit Config。
  * 这是 createSentryConfig() 的核心内部逻辑。
  */
 export function baseConfig(userOptions: SentryKitUserOptions): SentryKitConfig {
@@ -105,8 +116,8 @@ export function baseConfig(userOptions: SentryKitUserOptions): SentryKitConfig {
 	const config = {
 		transport: makeTransport,
 		ingestUrl: '',
-		topic: 'xp_amp_web_error_log',
-		environment: 'qa',
+		topic: DEFAULT_TOPIC,
+		environment: DEFAULT_ENVIRONMENT,
 		filterHeadless: true,
 		maxBreadcrumbs: 0,
 		release: undefined,
@@ -117,7 +128,7 @@ export function baseConfig(userOptions: SentryKitUserOptions): SentryKitConfig {
 		...userOptions,
 
 		privacyRules,
-		dsn: 'https://dsn@bypass/1',
+		dsn: DEFAULT_DSN,
 		autoSessionTracking: false,
 		sendClientReports: false,
 		replaysSessionSampleRate: undefined,
@@ -156,6 +167,7 @@ export function baseConfig(userOptions: SentryKitUserOptions): SentryKitConfig {
 
 /**
  * 为 Sentry Browser SDK 创建 beforeSend / beforeBreadcrumb 等 hooks。
+ * 这些 hooks 会被 注入到 Sentry.init() 的 options 中，作为事件发送前的拦截器
  * SentryKit 用它将自己的过滤逻辑整合到 Sentry 的生命周期中。
  */
 export function beforeHooksOptions(config: any) {
@@ -173,14 +185,27 @@ export function beforeHooksOptions(config: any) {
 
 	// 3. 返回最终提供给 Sentry.init 的 hooks
 	return {
+		// 在一个 error event（普通事件/异常）完成构造并准备要上报到 transport 之前调用, v
+		// event：将要上报的事件对象（可以直接修改它或返回一个新对象）
+		// hint：上下文信息（通常包含原始 exception、syntheticException、request info 等——SDK 内部会在构造事件时填充一些额外上下文）
 		beforeSend: (event: any, hint: any) => {
 			if (shouldSkipEvent) return null;
 			return config.beforeSend ? config.beforeSend(event, hint) : event;
 		},
+
+		// 在一个 transaction/trace event（性能追踪事务）构建并准备上报之前调用, 可返回 Promise
+		// 语义、行为与 beforeSend 类似，但针对 trace 类型事件
+		// event：transaction 事件对象（包含 spans、transaction name、contexts、measurements 等）
+		// hint：上下文（可能包含 trace context、原始数据等）
 		beforeSendTransaction: (event: any, hint: any) => {
 			if (shouldSkipEvent) return null;
 			return config.beforeSendTransaction ? config.beforeSendTransaction(event, hint) : event;
 		},
+
+		// 每次 SDK 拦截到一条 breadcrumb（例如：网络请求、console、navigation、user action）准备加入当前事件/会话的 breadcrumbs 列表时调用, 同步
+		// 与上面两个不同: 它发生在“事件构造早期”，用于决定是否把这条 breadcrumb 记录下来
+		// breadcrumb：要加入的 breadcrumb 对象（通常含 category, message, level, data 等）
+		// hint：额外上下文（例如原始 console args、xhr info 等）
 		beforeBreadcrumb: (breadcrumb: any, hint: any) => {
 			if (breadcrumb.category === 'console') return null;
 			return config.beforeBreadcrumb ? config.beforeBreadcrumb(breadcrumb, hint) : breadcrumb;

@@ -12,5 +12,14 @@ export const __SENTRY_DEBUG__ = true;
  */
 export const SUPPORTED_SENTRY_VERSION = '7.57.0';
 
-// XP（Experience Platform）上报服务的地址
+// XP(Experience Platform)上报服务的地址
 export const INGEST_URLS = { prod: 'https://xp.apple.com', qa: 'https://xp-qa.apple.com' };
+
+// 默认 DSN
+export const DEFAULT_DSN = 'https://dsn@bypass/1'
+
+// 默认 Topic
+export const DEFAULT_TOPIC = 'xp_amp_web_error_log'
+
+// 默认 environment
+export const DEFAULT_ENVIRONMENT = 'qa'
