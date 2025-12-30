@@ -1,8 +1,12 @@
 /**
- * @fileOverview Runtime
+ * @fileOverview runtime 是整个 Intent → Action → Handler 流程的核心调度器
  * @date 2025-11-18
  * @author poohlaha
- * @description
+ * @description Runtime 就像一个总指挥，负责接收 intent，然后找到对应的 controller，最后返回 action 或直接执行 handler（经过 ActionDispatcher）
+ * 它主要做三件事
+ * 1. 接收并分发 Intent
+ * 2. 调用对应 Controller
+ * 3. 返回执行结果/action
  */
 import { LegacyRuntime } from './runtime'
 import { WebIntentDispatcher } from '../dispatching/base'

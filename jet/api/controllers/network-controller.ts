@@ -24,6 +24,6 @@ export const NetworkIntentController: IntentController<NetworkIntent> = {
       return null
     }
 
-    return (objectGraph.network as Net).send(payload || {}, intent.fetchProps || {})
+    return (objectGraph.network as Net).once(payload || {}, intent.fetchProps || {})
   }
 }

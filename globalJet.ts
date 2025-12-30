@@ -4,7 +4,7 @@
  * @author poohlaha
  * @description
  */
-import { Jet } from './jet/jet'
+import { Jet } from './jet/export'
 
 let jetInstance: Jet | null = null
 

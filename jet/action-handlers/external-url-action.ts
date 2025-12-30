@@ -21,22 +21,26 @@ export function registerHandler(dependencies: Dependencies) {
   jet.onAction('ExternalUrlAction', async (actionModel: ActionModel) => {
     log.info('received external url action:', actionModel.$kind)
     const action = (actionModel.payload?.action || {}) as ExternalUrlAction
-    const url = action.getUrl() || ''
-    const external = action.getExternal()
-    const replace = action.getReplace()
 
-    if (external) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      replace ? window.location.replace(url) : (window.location.href = url)
-    } else {
-      const useNavigate: any = jet.objectGraph.navigate
-      if (useNavigate) {
-        useNavigate?.(url, { replace: replace })
+    let message = `Jet Runtime ExternalUrlAction ${action.getUrl()}`
+    return await jet.metrics.asyncTime(message, async () => {
+      const url = action.getUrl() || ''
+      const external = action.getExternal()
+      const replace = action.getReplace()
+
+      if (external) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+        replace ? window.location.replace(url) : (window.location.href = url)
       } else {
-        throw new Error('No navigate registered to object graph.')
+        const useNavigate: any = jet.objectGraph.navigate
+        if (useNavigate) {
+          useNavigate?.(url, { replace: replace })
+        } else {
+          throw new Error('No navigate registered to object graph.')
+        }
       }
-    }
 
-    return PERFORMED
+      return PERFORMED
+    })
   })
 }

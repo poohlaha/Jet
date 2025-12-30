@@ -12,8 +12,6 @@ Jet
         ↓
      ActionDispatcher.perform(action)
 ```
-
-`Intent → dispatch → action → handler → Page → UI`
 ![](./jet.png)
 
 ## 执行过程
@@ -45,4 +43,44 @@ Jet
  compoundActionHandler(...)                   ← 调用 compound-action.ts 中注册的处理器
      ↓
  metrics.asyncTime                        ← 记录 dispatch 性能时间
+```
+
+## 使用方法
+1. 在项目中引入根目录下的 `bootstrap.ts`、`browser.ts`、`globalJet.ts`
+
+2. 在项目启动时调用 `browser.ts` 中的 `startApplication` 方法, `startApplication` 中可以注入 `stores` 和 `navigate`
+```ts
+import { startApplication } from './browser'
+import { STORES } from './stores'
+const navigate = useNavigate()
+
+useEffect(() => {
+  startApplication(STORES, navigate)
+}, [])
+```
+
+3. 使用
+```ts
+import { getJet } from './globalJet'
+
+const Jet = getJet()
+
+// 路由
+Jet?.onRoute({
+    $kind: 'RouteUrlIntent',
+    payload: {
+        route: '/xxx',
+        replace: false
+    }
+})
+
+// 事件
+Jet?.perform(makeFlowIntent('/xxx', {id: 'xxx'}));
+
+// 请求
+Jet()?.dispatch<NetworkIntent>({
+    $kind: 'NetworkIntent',
+    payload: { ...(params || {}) }
+})
+
 ```

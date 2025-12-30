@@ -4,10 +4,7 @@
  * @author poohlaha
  * @description 把 bootstrap 中的 wiring 集中在一个文件，便于替换/测试（例如在单元测试中可以创建一个使用 mock handler 的 Jet）
  */
-import { LoggerFactory } from './jet/shared/logger/logger'
-import { ConsoleMetrics } from './jet/environment/metrics'
-import { Jet } from './jet/jet'
-import type { FeaturesCallbacks } from './jet/dependencies/net'
+import { LoggerFactory, ConsoleMetrics, FeaturesCallbacks, Jet } from './jet/export'
 
 export async function bootstrap({
   loggerFactory,

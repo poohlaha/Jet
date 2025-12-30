@@ -1,8 +1,11 @@
 /**
- * @fileOverview Object Graph
+ * @fileOverview Object Graph 是 Jet 的“依赖和对象管理中心”
  * @date 2025-11-18
  * @author poohlaha
- * @description
+ * @description 它就像一个容器，把系统里的各种模块、服务、控制器、handler 组织起来，并提供统一访问入口
+ * 1. 管理模块实例
+ * 2. 统一依赖注入
+ * 3. 协调不同模块
  */
 import {
   ACTIVE_INTENT_TYPE,

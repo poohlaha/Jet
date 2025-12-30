@@ -44,7 +44,7 @@ export class Jet {
   private readonly runtime: WebRuntime
   private readonly actionDispatcher: ActionDispatcher // 保存传入的 dispatcher
   private readonly log: Logger // logger 实例
-  private readonly metrics: Metrics // metrics 实例
+  readonly metrics: Metrics // metrics 实例
   // @ts-ignore
   private prefetched: Map<string, Action> // Map, 用于在 dispatch 时检查是否已有预取的 事件
   private readonly prefetchedIntents: PrefetchedIntents

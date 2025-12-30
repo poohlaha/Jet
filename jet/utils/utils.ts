@@ -39,6 +39,27 @@ export default class Utils {
   static capitalizeFirstLetter(str: string = ''): string {
     return str.charAt(0).toUpperCase() + str.slice(1)
   }
+
+  /**
+   * 深拷贝
+   */
+  static deepCopy(o: any) {
+    if (o instanceof Array) {
+      let n: Array<any> = []
+      for (let i = 0; i < o.length; ++i) {
+        n[i] = Utils.deepCopy(o[i])
+      }
+      return n
+    }
+    if (o instanceof Object) {
+      let n: any = {}
+      for (let i in o) {
+        n[i] = Utils.deepCopy(o[i])
+      }
+      return n
+    }
+    return o
+  }
 }
 
 export function isNothing(value: any): value is null | undefined {
