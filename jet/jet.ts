@@ -28,6 +28,7 @@ import { DispatcherIntent } from './environment/dispatching/base/dispatcher'
 import { makeRouteUrlIntent, RouteUrlIntent } from './api/intents/route-url/route-url-intent'
 import Utils from './utils/utils'
 import { STORE_INTENT_KIND, StoreIntent } from './api/intents/store/store-intent'
+import { makeExternalUrlAction } from './api/intents/intent'
 
 export type JetOptions = {
   runtime: WebRuntime
@@ -177,6 +178,9 @@ export class Jet {
   }
    */
 
+  /**
+   * Perform a Jet action, returning the outcome.
+   */
   async perform(action: ActionModel) {
     const outcome = await this.actionDispatcher.perform(action)
     if (outcome === UNSUPPORTED) {
@@ -190,10 +194,14 @@ export class Jet {
     const routerResponse = await this.dispatch<RouteUrlIntent>(makeRouteUrlIntent({ ...intent }))
 
     if (routerResponse && routerResponse.action) {
-      return routerResponse
+      return await this.perform(makeExternalUrlAction(intent.payload.route || '', { ...routerResponse }))
     }
 
-    this.log.warn('url did not resolve to a flow action with a discernable intent:', intent.url, routerResponse)
+    this.log.warn(
+      'url did not resolve to a flow action with a discernable intent:',
+      intent.payload.route,
+      routerResponse
+    )
     return null
   }
 

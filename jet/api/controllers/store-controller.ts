@@ -1,5 +1,5 @@
 /**
- * @fileOverview Store Intent
+ * @fileOverview Store Controller
  * @date 2025-11-10
  * @author poohlaha
  * @description

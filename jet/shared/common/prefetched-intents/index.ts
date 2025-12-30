@@ -1,18 +1,9 @@
-import { LoggerFactory } from '../../../shared/logger/logger'
 import { Intent } from '../../../types'
 import { stableStringify } from './server-data'
-import { getPrefetchedIntents } from './get-prefetched-intents'
 
 export class PrefetchedIntents {
   static empty(): PrefetchedIntents {
     return new PrefetchedIntents(new Map())
-  }
-
-  static fromDom(
-    loggerFactory: LoggerFactory,
-    options?: { evenIfSignedIn?: boolean; featureKitItfe?: string }
-  ): PrefetchedIntents {
-    return new PrefetchedIntents(getPrefetchedIntents(loggerFactory, options))
   }
 
   private intents: Map<string, unknown>

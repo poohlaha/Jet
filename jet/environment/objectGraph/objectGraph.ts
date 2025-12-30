@@ -4,11 +4,11 @@
  * @author poohlaha
  * @description
  */
-import { Net } from '../../dependencies/net'
 import {
   ACTIVE_INTENT_TYPE,
   CLIENT_TYPE,
   CONSOLE_TYPE,
+  COOKIE_TYPE,
   DISPATCHER_TYPE,
   LOCAL_STORAGE_TYPE,
   MEMORY_TYPE,
@@ -21,14 +21,16 @@ import {
   TREATMENT_STORE_TYPE,
   USER_TYPE
 } from './types'
+import { Net } from '../../dependencies/net'
 import { WebClient, WebClientInfo } from '../../dependencies/client'
-import { WebConsole } from '../../dependencies/console'
 import { WebMetricsIdentifiers } from '../../dependencies/metricsIdentifiers'
+import { WebConsole } from '../../dependencies/console'
 import { WebStorage } from '../../dependencies/storage'
 import { WebMemory } from '../../dependencies/memory'
-import { isNothing } from '../../utils/utils'
+import { WebCookie } from '../../dependencies/cookie'
 import { ActiveIntent } from '../../dependencies/active-intent'
-import { WithPageIntent } from '../../intents/page/page-intent'
+import { WithPageIntent } from '../../api/intents/page/page-intent'
+import { isNothing } from '../../utils/utils'
 
 export class ObjectGraph {
   private _members: Record<string, any> = {}
@@ -114,6 +116,10 @@ export class AppObjectGraph extends ObjectGraph {
     return this.adding(MEMORY_TYPE, memory)
   }
 
+  addingCookie(cookie: WebCookie) {
+    return this.adding(COOKIE_TYPE, cookie)
+  }
+
   addingUser(user: { [K: string]: any }) {
     return this.adding(USER_TYPE, user)
   }
@@ -153,6 +159,10 @@ export class AppObjectGraph extends ObjectGraph {
 
   get sessionStorage(): WebMemory {
     return this.required(SESSION_STORAGE_TYPE)
+  }
+
+  get cookie(): WebCookie {
+    return this.required(COOKIE_TYPE)
   }
 
   get user() {

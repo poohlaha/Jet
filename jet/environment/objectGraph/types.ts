@@ -22,6 +22,8 @@ export const LOCAL_STORAGE_TYPE = makeMetaType('jet-engine:local-storage')
 
 export const SESSION_STORAGE_TYPE = makeMetaType('jet-engine:session-storage')
 
+export const COOKIE_TYPE = makeMetaType('jet-engine:cookie')
+
 export const MEMORY_TYPE = makeMetaType('jet-engine:memory')
 
 export const USER_TYPE = makeMetaType('jet-engine:user')

@@ -35,15 +35,5 @@ export async function bootstrap({
     navigate
   })
 
-  // 注册事件监听器系统
-  /*
-  jet.onAction = (kind: string, handler: Function) => {
-    dispatcher.register(kind, async action => {
-      await handler(action)
-      return PERFORMED
-    })
-  }
-   */
-
   return jet
 }

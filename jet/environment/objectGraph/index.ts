@@ -9,7 +9,7 @@ import { AppObjectGraph } from './objectGraph'
 
 export class WebObjectGraph extends AppObjectGraph {
   configureWithDependencies(dependencies: Dependencies) {
-    const { client, console, metricsIdentifiers, net, memory, storage, user } = dependencies
+    const { client, console, metricsIdentifiers, net, memory, storage, user, cookie } = dependencies
 
     return this.addingClient(client)
       .addingNetwork(net)
@@ -19,6 +19,7 @@ export class WebObjectGraph extends AppObjectGraph {
       .addingLocalStorage(storage.local)
       .addingSessionStorage(storage.session)
       .addingUser(user)
+      .addingCookie(cookie)
   }
 }
 

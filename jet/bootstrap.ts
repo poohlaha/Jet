@@ -23,6 +23,11 @@ import {
   SessionStorageRemoveIntentController,
   SessionStorageSetIntentController
 } from './api/controllers/storage-controller'
+import {
+  CookieSetIntentController,
+  CookieGetIntentController,
+  CookieClearIntentController
+} from './api/controllers/cookie-controller'
 import { StoreIntentController } from './api/controllers/store-controller'
 
 function makeIntentDispatcher(): WebIntentDispatcher {
@@ -47,6 +52,11 @@ function makeIntentDispatcher(): WebIntentDispatcher {
   intentDispatcher.register(SessionStorageSetIntentController)
   intentDispatcher.register(SessionStorageRemoveIntentController)
   intentDispatcher.register(SessionStorageClearIntentController)
+
+  // cookie
+  intentDispatcher.register(CookieGetIntentController)
+  intentDispatcher.register(CookieSetIntentController)
+  intentDispatcher.register(CookieClearIntentController)
 
   // store
   intentDispatcher.register(StoreIntentController)

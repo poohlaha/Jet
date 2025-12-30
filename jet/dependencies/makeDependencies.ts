@@ -12,6 +12,7 @@ import { WebMemory } from './memory'
 import { WebConsole } from './console'
 import { makeUnauthenticatedUser } from './user'
 import { WebStorage } from './storage'
+import { WebCookie } from './cookie'
 
 export type Dependencies = ReturnType<typeof makeDependencies>
 
@@ -26,6 +27,7 @@ export function makeDependencies(loggerFactory: LoggerFactory, featuresCallbacks
       local: new WebStorage(window.localStorage),
       session: new WebStorage(window.sessionStorage)
     },
+    cookie: new WebCookie(),
     user: makeUnauthenticatedUser(),
     URL
   }

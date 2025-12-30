@@ -19,10 +19,12 @@ export function registerHandler(dependencies: Dependencies) {
   jet.onAction(COMPOUND_ACTION_KIND, async (action: any) => {
     log.info(`received ${COMPOUND_ACTION_KIND}:`, action)
 
+    /*
     // Perform actions in sequence
     await jet.perform(action).catch(e => {
       throw new Error(`an error occurred while handling CompoundAction: ${e}`)
     })
+     */
 
     return PERFORMED
   })
