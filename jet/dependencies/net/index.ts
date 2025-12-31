@@ -15,7 +15,7 @@
 import { HttpResponse, IHttpRequestFetchProps, IHttpRequestProps } from './types'
 import { Client } from './client'
 import { Logger, LoggerFactory } from '../../shared/logger/logger'
-import { LOGGER_PREFIX_NAME } from '../../config'
+import { CONTEXT_NAME } from '../../config'
 import Utils from '../../utils/utils'
 
 // 在运行时从“特性系统 / 实验系统”中获取 ITFE（Internal Test Feature Experiments）值，用来决定网络请求里要不要加上某些实验参数
@@ -32,7 +32,7 @@ export class Net {
 
   constructor(loggerFactory: LoggerFactory, featuresCallbacks?: FeaturesCallbacks) {
     this.featuresCallbacks = featuresCallbacks
-    this.logger = loggerFactory.loggerFor(`${LOGGER_PREFIX_NAME} Net`)
+    this.logger = loggerFactory.loggerFor(`${CONTEXT_NAME} Net`)
   }
 
   /**
@@ -83,7 +83,9 @@ export class Net {
             reject(res)
           }
         },
-        fetchProps
+        fetchProps,
+        this.logger,
+        this.featuresCallbacks
       )
     })
 

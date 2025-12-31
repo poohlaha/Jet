@@ -5,7 +5,7 @@
  * @description 提供 metrics 接口（记录事件、计时）与一个 console 实现 consoleMetrics，用于性能度量与事件统计
  */
 import { LoggerFactory, Logger } from '../../shared/logger/logger'
-import { LOGGER_PREFIX_NAME } from '../../config'
+import { CONTEXT_NAME } from '../../config'
 
 export interface Metrics {
   recordEvent(name: string, payload?: any): void
@@ -18,7 +18,7 @@ export class ConsoleMetrics {
   private readonly log: Logger
 
   constructor(logger: LoggerFactory) {
-    this.log = logger.loggerFor(`[${LOGGER_PREFIX_NAME} ${CONSOLE_METRICS_NAME}]`)
+    this.log = logger.loggerFor(`[${CONTEXT_NAME} ${CONSOLE_METRICS_NAME}]`)
   }
 
   recordEvent(name: string, payload: any) {

@@ -1,7 +1,7 @@
 import { Environment } from '../../types'
 import { RecordingLoggerFactory } from '../../shared/logger/recordingLogger'
 import { LoggerFactory } from '../../shared/logger/logger'
-import { LOGGER_PREFIX_NAME } from '../../config'
+import { CONTEXT_NAME } from '../../config'
 import { __FF_ARYA } from './consts'
 
 export type FeatureOverride = {
@@ -51,8 +51,8 @@ export function loadFeatureKit(
 ): OnyxFeatures {
   queueMicrotask(() => {
     try {
-      console.log(`%c[${LOGGER_PREFIX_NAME} queueMicrotask] Executed microtask`, 'color: green;')
-      const log = logger.loggerFor(`${LOGGER_PREFIX_NAME} RuntimeFeatures`)
+      console.log(`%c[${CONTEXT_NAME} queueMicrotask] Executed microtask`, 'color: green;')
+      const log = logger.loggerFor(`${CONTEXT_NAME} RuntimeFeatures`)
       log.info(`Loading FeatureKit for ${namespace} in ${env}`)
 
       if (options?.enableToolbar) {
@@ -63,7 +63,7 @@ export function loadFeatureKit(
         log.info('Radar config:', options.radarConfig)
       }
     } catch {
-      console.warn(`[${LOGGER_PREFIX_NAME} RuntimeFeatures] Deferred logger not ready yet`)
+      console.warn(`[${CONTEXT_NAME} RuntimeFeatures] Deferred logger not ready yet`)
     }
   })
 

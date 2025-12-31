@@ -24,6 +24,16 @@ export const NetworkIntentController: IntentController<NetworkIntent> = {
       return null
     }
 
+    // 用于上报
+    const data = await objectGraph.metricsIdentifiers?.getMetricsFieldsForContexts([
+      {
+        type: 'api_request',
+        key: `${intent.key || ''}|${url}`
+      }
+    ])
+
+    objectGraph.console.log('filled point data: ', data)
+
     return (objectGraph.network as Net).once(payload || {}, intent.fetchProps || {})
   }
 }

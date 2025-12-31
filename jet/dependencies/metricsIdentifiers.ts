@@ -17,13 +17,18 @@ export type JSONData = { [key: string]: string | number | boolean | null | JSOND
 export class WebMetricsIdentifiers {
   private readonly sessionId: string = crypto.randomUUID()
 
-  // 根据一个指标上下文（MetricsIdentifierKeyContext）返回对应的唯一标识, 用户 ID、会话 ID、设备 ID
-  async getIdentifierForContext(_context: MetricsIdentifierKeyContext): Promise<string> {
-    return this.sessionId // 每个会话唯一
+  async getIdentifierForContext(context: MetricsIdentifierKeyContext): Promise<string> {
+    return `${context.type}|${context.key || 'default'}|${context.userId || 'anon'}|${this.sessionId}`
   }
 
-  // 接收一组上下文，返回一个 JSON 数据对象, 便于日志或埋点上报
-  async getMetricsFieldsForContexts(_contexts: MetricsIdentifierKeyContext[]): Promise<JSONData> {
-    return { sessionId: this.sessionId }
+  // 使用 type + key + userId + sessionId 生成 traceId
+  async getMetricsFieldsForContexts(contexts: MetricsIdentifierKeyContext[]): Promise<JSONData> {
+    const fields: JSONData = { sessionId: this.sessionId }
+    contexts.forEach(context => {
+      // const timestamp = context.timestamp ?? Date.now()
+      fields[context.key || context.type] =
+        `${context.type}|${context.key || 'default'}|${context.userId || 'anon'}|${this.sessionId}`
+    })
+    return fields
   }
 }

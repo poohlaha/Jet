@@ -5,7 +5,7 @@
  * @description
  */
 import type { Logger, LoggerFactory } from '../logger'
-import { LOGGER_PREFIX_NAME } from '../../../config'
+import { CONTEXT_NAME } from '../../../config'
 import { ErrorHub } from './types'
 // import { SentryKitUserOptions } from '../../../sentrykit';
 
@@ -23,7 +23,7 @@ export const setupErrorKit = (
 ): ErrorKitInstance | undefined => {
   if (typeof window === 'undefined') return
 
-  const log = loggerFactory.loggerFor(`${LOGGER_PREFIX_NAME} ErrorKit`)
+  const log = loggerFactory.loggerFor(`${CONTEXT_NAME} ErrorKit`)
   const BUILD_ENV = process.env.NODE_ENV
   const isMultiDev = window.location.href.includes('multidev')
   const isErrorKitEnabled = BUILD_ENV === 'production' && !isMultiDev

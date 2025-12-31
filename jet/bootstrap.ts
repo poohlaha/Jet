@@ -12,7 +12,11 @@ import { WebRuntime } from './environment/runtime'
 import { makeRouterUsingRegisteredControllers } from './environment/routing/router-factory'
 import { RouteUrlIntentController } from './api/controllers/route-url-controller'
 import { NetworkIntentController } from './api/controllers/network-controller'
-import { MemoryGetIntentController, MemorySetIntentController } from './api/controllers/memory-controller'
+import {
+  MemoryGetIntentController,
+  MemoryRemoveIntentController,
+  MemorySetIntentController
+} from './api/controllers/memory-controller'
 import {
   LocalStorageClearIntentController,
   LocalStorageGetIntentController,
@@ -42,6 +46,7 @@ function makeIntentDispatcher(): WebIntentDispatcher {
   // memory
   intentDispatcher.register(MemoryGetIntentController)
   intentDispatcher.register(MemorySetIntentController)
+  intentDispatcher.register(MemoryRemoveIntentController)
 
   // storage
   intentDispatcher.register(LocalStorageGetIntentController)

@@ -27,3 +27,23 @@ export const MemoryGetIntentController: IntentController<MemoryIntent> = {
     return memory.getItem(intent.key)
   }
 }
+
+export const MemoryRemoveIntentController: IntentController<MemoryIntent> = {
+  $intentKind: 'MemoryRemoveIntent',
+
+  // @ts-ignore
+  async perform(intent: MemoryIntent, objectGraph: WebObjectGraph): any {
+    const memory = objectGraph.memory
+    return memory.removeItem(intent.key)
+  }
+}
+
+export const MemoryClearIntentController: IntentController<MemoryIntent> = {
+  $intentKind: 'MemoryClearIntent',
+
+  // @ts-ignore
+  async perform(intent: MemoryIntent, objectGraph: WebObjectGraph): any {
+    const memory = objectGraph.memory
+    return memory.clearItem()
+  }
+}

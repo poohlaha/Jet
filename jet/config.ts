@@ -4,7 +4,10 @@
  * @author poohlaha
  * @description
  */
-export const LOGGER_PREFIX_NAME = 'Jet'
+export const CONTEXT_NAME = 'Jet'
+export const NAMESPACE = 'com.jet'
+
+export const LTFE = ['y9ttlj15']
 
 export const PERFORMED = Symbol('performed')
 export const UNSUPPORTED = Symbol('unsupported')

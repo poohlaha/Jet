@@ -6,7 +6,7 @@
  */
 import { DispatcherIntent } from '../../../environment/dispatching/base/dispatcher'
 
-export const COOKIE_INTENT_KIND = 'CookieIntent' as const
+export const COOKIE_INTENT_KIND = 'CookieSetIntent' as const
 
 export interface Storage {
   getItem(key: string): string | null

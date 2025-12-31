@@ -5,14 +5,14 @@
  * @description
  */
 import { Dependencies } from '../types'
-import { LOGGER_PREFIX_NAME, PERFORMED } from '../config'
+import { CONTEXT_NAME, PERFORMED } from '../config'
 
 export const COMPOUND_ACTION_KIND = 'CompoundAction'
 
 export function registerHandler(dependencies: Dependencies) {
   const { jet, logger } = dependencies
 
-  const log = logger.loggerFor(`[${LOGGER_PREFIX_NAME} ${COMPOUND_ACTION_KIND}]`)
+  const log = logger.loggerFor(`[${CONTEXT_NAME} ${COMPOUND_ACTION_KIND}]`)
 
   log.info(`Registering ${COMPOUND_ACTION_KIND}Handler`)
 

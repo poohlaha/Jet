@@ -13,14 +13,19 @@ import {
   registerActionHandlers,
   setupRuntimeFeatures,
   ERROR_KIT_CONFIG,
-  LOGGER_PREFIX_NAME
+  CONTEXT_NAME,
+  Utils
 } from './jet/export'
-import { setJet } from './globalJet'
+import { setContext, setJet } from './global'
 import { bootstrap } from './bootstrap'
 
-export async function startApplication(store: Record<string, any> = {}, navigate: (to: string) => void) {
+export async function startApplication(
+  store: Record<string, any> = {},
+  navigate: (to: string) => void,
+  callback?: Function
+) {
   console.log(
-    `🟢%c[${LOGGER_PREFIX_NAME}] %cStarting application...`,
+    `🟢%c[${CONTEXT_NAME}] %cStarting application...`,
     'color: green;font-weight:bold;',
     'color: magenta;font-weight:bold;'
   )
@@ -32,7 +37,7 @@ export async function startApplication(store: Record<string, any> = {}, navigate
   const errorKit = setupErrorKit(
     {
       ...ERROR_KIT_CONFIG,
-      environment: process.env.NODE_ENV || 'qa'
+      environment: Utils.getEnv('qa')
     },
     consoleLogger
   )
@@ -42,7 +47,7 @@ export async function startApplication(store: Record<string, any> = {}, navigate
     ...(onyxFeatures ? [onyxFeatures.recordingLogger] : [])
   ])
 
-  const jet = await bootstrap({
+  const { jet, context } = await bootstrap({
     loggerFactory: logger,
     featuresCallbacks: {
       getITFEValues(): string[] | undefined {
@@ -57,6 +62,9 @@ export async function startApplication(store: Record<string, any> = {}, navigate
 
   // 全局保存
   setJet(jet)
+  setContext(context)
+
+  callback?.(context, logger)
 
   // 注册 ActionHandlers
   registerActionHandlers({
@@ -65,7 +73,7 @@ export async function startApplication(store: Record<string, any> = {}, navigate
   })
 
   console.log(
-    `🟢%c[${LOGGER_PREFIX_NAME}] %cApplication ready`,
+    `🟢%c[${CONTEXT_NAME}] %cApplication ready`,
     'color: green;font-weight:bold;',
     'color: magenta;font-weight:bold;'
   )

@@ -7,7 +7,7 @@
  * 所以刷新页面后数据会丢失
  */
 
-export class WebMemory extends Map<string, string> implements Storage {
+export class WebMemory extends Map<string, any> implements Storage {
   // 返回存储的条目数量: Map.size
   get length() {
     return this.size
@@ -28,8 +28,13 @@ export class WebMemory extends Map<string, string> implements Storage {
     this.delete(key)
   }
 
+  // 清空
+  clearItem(): void {
+    this.clear()
+  }
+
   // 设置 key 的值
-  setItem(key: string, value: string): void {
+  setItem(key: string, value: any): void {
     this.set(key, value)
   }
 

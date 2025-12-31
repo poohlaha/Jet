@@ -40,31 +40,81 @@ Jet
      ↓
  ActionDispatcher.perform(action)         ← 找到已注册的 handler(flowActionHandler)
      ↓
- compoundActionHandler(...)                   ← 调用 compound-action.ts 中注册的处理器
+ compoundActionHandler(...)               ← 调用 compound-action.ts 中注册的处理器
      ↓
  metrics.asyncTime                        ← 记录 dispatch 性能时间
 ```
 
 ## 使用方法
-1. 在项目中引入根目录下的 `bootstrap.ts`、`browser.ts`、`globalJet.ts`
+1. 在项目中引入根目录下的 `bootstrap.ts`、`browser.ts`、`global.ts` 或 `provider.tsx(使用 ReactContext 注入)`
 
 2. 在项目启动时调用 `browser.ts` 中的 `startApplication` 方法, `startApplication` 中可以注入 `stores` 和 `navigate`
-```ts
-import { startApplication } from './browser'
-import { STORES } from './stores'
-const navigate = useNavigate()
+   - 使用 `ReactContext` 注入
+   ```tsx
+    import { startApplication } from './browser'
+    import { CONTEXT_NAME, Jet, LoggerFactory } from './jet/export'
+    import { AppProvider, AppContextValue } from './provider'
+    import { STORES } from './stores'
+   
+    const navigate = useNavigate()
+    const [appValue, setAppValue] = useState<AppContextValue>({
+       context: new Map(),
+       logger: console,
+       jet: undefined
+    })
 
-useEffect(() => {
-  startApplication(STORES, navigate)
-}, [])
+    useEffect(() => {
+       startApplication(STORES, navigate, (context: Map<string, unknown>, logger: LoggerFactory) => {
+           const jet = context.get(CONTEXT_NAME) as Jet
+           setAppValue({
+             context,
+             logger,
+             jet
+           })
+       })
+    }, [])
+   
+    return (
+      <AppProvider value={appValue}>
+        {/* */}
+      </AppProvider>
+   )
+   ```
+   
+   - 普通注入
+   ```ts
+    import { startApplication } from './browser'
+    import { STORES } from './stores'
+    const navigate = useNavigate()
+    
+    useEffect(() => {
+      startApplication(STORES, navigate)
+    }, [])
+   ```
+
+3. 在 `ReactContext` 中获取 `jet` 和 `context`
+```tsx
+import { AppProvider } from '../provider'
+import { getUniqueIdGenerator } from './jet/export'
+
+const { jet: Jet, context } = useContext(AppContext)
+
+// 页面 Id
+const [pageId, setPageId] = useState('')
+
+setPageId(getUniqueIdGenerator(context)())
 ```
 
-3. 使用
+4. 普通获取 `jet` 和 `context`
 ```ts
-import { getJet } from './globalJet'
+import { getJet, getContext } from './global'
 
 const Jet = getJet()
+const Context = getContext()
+```
 
+5. 使用
+```ts
 // 路由
 Jet?.onRoute({
     $kind: 'RouteUrlIntent',
@@ -78,9 +128,5 @@ Jet?.onRoute({
 Jet?.perform(makeFlowIntent('/xxx', {id: 'xxx'}));
 
 // 请求
-Jet()?.dispatch<NetworkIntent>({
-    $kind: 'NetworkIntent',
-    payload: { ...(params || {}) }
-})
-
+await Jet()?.services.NetworkService?.request({ id: 'xxxx' })
 ```

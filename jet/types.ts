@@ -26,17 +26,20 @@ export type ActionModel = {
   key?: string
 }
 
-export type ENV =
-  | 'qa' // 开发版本
-  | 'development' // 开发版本
-  | 'production' // 正式发布版本
-  | 'internal' // 内部测试版本（企业/QA）
+export const ENVS = [
+  'qa', // 开发版本
+  'development', // 开发版本
+  'production', // 正式发布版本
+  'internal' // 内部测试版本（企业/QA）
+] as const
+
+export type ENV = (typeof ENVS)[number]
 
 export const ENVIRONMENT = {
-  DEV: 'development',
-  QA: 'qa',
-  PROD: 'production',
-  INTERNAL: 'internal'
+  QA: ENVS[0],
+  DEV: ENVS[1],
+  PROD: ENVS[2],
+  INTERNAL: ENVS[3]
 } as const
 
 export type Environment = ENV

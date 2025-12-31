@@ -7,6 +7,7 @@
 import { LoggerFactory } from '../../shared/logger/logger'
 import { buildFeatureConfig, buildRuntimeFeatureKitConfig, loadFeatureKit, OnyxFeatures } from './featureKit'
 import { Environment, ENVIRONMENT } from '../../types'
+import { LTFE, NAMESPACE } from '../../config'
 
 export const BUILD = process.env.VERSION as string
 
@@ -26,14 +27,14 @@ export async function setupRuntimeFeatures(logger: LoggerFactory): Promise<OnyxF
         }),
         [features.__FF_ARYA]: {
           ...buildFeatureConfig({ [ENVIRONMENT.DEV]: false }),
-          itfe: ['y9ttlj15']
+          itfe: LTFE
         }
       },
       currentEnv as Environment
     )
 
     // Load runtime featureKit
-    return loadFeatureKit('com.jet.web', ENVIRONMENT.DEV, config, logger, {
+    return loadFeatureKit(NAMESPACE, ENVIRONMENT.DEV, config, logger, {
       enableToolbar: true,
       radarConfig: {
         component: 'Web',

@@ -24,6 +24,7 @@ export class WebRuntime extends LegacyRuntime {
       ...existingService,
       ...service
     }
+
     return super.exportingService(name, newService)
   }
 
@@ -32,7 +33,24 @@ export class WebRuntime extends LegacyRuntime {
     service[functionName] = implementation
     this.exportingService(name, service)
   }
+
   wrapServiceInValidation(service: any) {
-    return service
+    for (const memberName of Object.keys(service)) {
+      const serviceFunction = service[memberName]
+      if (serviceFunction instanceof Function) {
+        service[memberName] = function validationThunk(...args: any[]) {
+          const returnValue = serviceFunction.apply(this, args)
+          if (returnValue instanceof Promise) {
+            return returnValue.then(value => {
+              // validation.recordValidationIncidents(value);
+              return value
+            })
+          } else {
+            // validation.recordValidationIncidents(returnValue);
+            return returnValue
+          }
+        }
+      }
+    }
   }
 }

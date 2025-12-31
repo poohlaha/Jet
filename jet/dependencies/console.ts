@@ -5,13 +5,13 @@
  * @description
  */
 import { Logger, LoggerFactory } from '../shared/logger/logger'
-import { LOGGER_PREFIX_NAME } from '../config'
+import { CONTEXT_NAME } from '../config'
 
 export class WebConsole {
   private readonly logger: Logger
 
   constructor(loggerFactory: LoggerFactory) {
-    this.logger = loggerFactory.loggerFor(`${LOGGER_PREFIX_NAME} Console`)
+    this.logger = loggerFactory.loggerFor(`${CONTEXT_NAME} Console`)
   }
 
   error(...data: unknown[]): void {

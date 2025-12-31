@@ -3,6 +3,7 @@
  * @date 2023-12-05
  * @author poohlaha
  */
+import { ENV, ENVS } from '../types'
 
 export default class Utils {
   /**
@@ -72,4 +73,13 @@ export function isSome<T>(v: T | null | undefined): v is T {
 
 export function isAdamId(id: string) {
   return /^\d{1,19}$/.test(id)
+}
+
+export function getEnv(defaultEnv: string = 'production') {
+  const env = process.env.NODE_ENV || ''
+  if (ENVS.includes(env as ENV)) {
+    return env as ENV
+  }
+
+  return (defaultEnv || 'production') as ENV
 }

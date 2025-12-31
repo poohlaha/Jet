@@ -5,6 +5,7 @@
  * @description
  */
 import type { Logger, LoggerFactory } from './logger'
+import { CONTEXT_NAME } from '../../config'
 
 type LogRecord = {
   level: 'info' | 'warn' | 'error' | 'debug'
@@ -18,7 +19,7 @@ export class RecordingLogger implements Logger {
     private readonly source: string,
     private buffer: LogRecord[]
   ) {
-    this.source = source || 'Jet'
+    this.source = source || CONTEXT_NAME
     if (this.source.indexOf('[') === -1) {
       this.source = `[${this.source}]`
     }

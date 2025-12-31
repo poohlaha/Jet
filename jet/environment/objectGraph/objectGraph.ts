@@ -176,7 +176,7 @@ export class AppObjectGraph extends ObjectGraph {
     return this.required(NET_TYPE)
   }
 
-  get metricsIdentifiers() {
+  get metricsIdentifiers(): WebMetricsIdentifiers {
     return this.required(METRICS_IDENTIFIERS_TYPE)
   }
 

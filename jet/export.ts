@@ -20,11 +20,14 @@ import { setupRuntimeFeatures } from './shared/features'
 
 import { makeFlowIntent, makeCompoundIntent, makeExternalUrlAction } from './api/intents/intent'
 
+import { initializeUniqueIdContext, getUniqueIdGenerator } from './utils/uniqueId'
+
 import { Action, ActionModel, Intent, Environment } from './types'
 import { ERROR_KIT_CONFIG } from './errorkit-config'
 import { bootstrap } from './bootstrap'
-import { LOGGER_PREFIX_NAME } from './config'
+import { CONTEXT_NAME } from './config'
 import { Jet } from './jet'
+import * as Utils from './utils/utils'
 
 export type { StoreIntent, NetworkIntent, LoggerFactory, FeaturesCallbacks, Action, ActionModel, Intent, Environment }
 
@@ -37,11 +40,14 @@ export {
   CompositeLoggerFactory,
   ErrorKitLoggerFactory,
   DeferredLoggerFactory,
+  initializeUniqueIdContext,
+  getUniqueIdGenerator,
   setupErrorKit,
   registerActionHandlers,
   setupRuntimeFeatures,
   ERROR_KIT_CONFIG,
   Jet,
   bootstrap,
-  LOGGER_PREFIX_NAME
+  CONTEXT_NAME,
+  Utils
 }

@@ -9,7 +9,7 @@ import { CookieIntent } from '../intents/cookie/cookie-intent'
 import { WebObjectGraph } from '../../environment/objectGraph'
 
 export const CookieSetIntentController: IntentController<CookieIntent> = {
-  $intentKind: 'CookieSetIntentController',
+  $intentKind: 'CookieSetIntent',
 
   // @ts-ignore
   async perform(intent: CookieIntent, objectGraph: WebObjectGraph) {
@@ -19,7 +19,7 @@ export const CookieSetIntentController: IntentController<CookieIntent> = {
 }
 
 export const CookieGetIntentController: IntentController<CookieIntent> = {
-  $intentKind: 'CookieGetIntentController',
+  $intentKind: 'CookieGetIntent',
 
   // @ts-ignore
   async perform(intent: CookieIntent, objectGraph: WebObjectGraph): any {
@@ -29,7 +29,7 @@ export const CookieGetIntentController: IntentController<CookieIntent> = {
 }
 
 export const CookieClearIntentController: IntentController<CookieIntent> = {
-  $intentKind: 'CookieClearIntentController',
+  $intentKind: 'CookieClearIntent',
 
   // @ts-ignore
   async perform(intent: CookieIntent, objectGraph: WebObjectGraph) {

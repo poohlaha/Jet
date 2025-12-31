@@ -13,12 +13,13 @@ import { WebConsole } from './console'
 import { makeUnauthenticatedUser } from './user'
 import { WebStorage } from './storage'
 import { WebCookie } from './cookie'
+import { getEnv } from '../utils/utils'
 
 export type Dependencies = ReturnType<typeof makeDependencies>
 
 export function makeDependencies(loggerFactory: LoggerFactory, featuresCallbacks?: FeaturesCallbacks) {
   return {
-    client: new WebClient('production'),
+    client: new WebClient(getEnv()),
     console: new WebConsole(loggerFactory),
     metricsIdentifiers: new WebMetricsIdentifiers(),
     net: new Net(loggerFactory, featuresCallbacks),

@@ -15,7 +15,7 @@
  */
 import { Logger, LoggerFactory } from './shared/logger/logger'
 import { Metrics } from './environment/metrics'
-import { LOGGER_PREFIX_NAME, UNSUPPORTED } from './config'
+import { CONTEXT_NAME, UNSUPPORTED } from './config'
 import { ActionDispatcher } from './engine/actions/action-dispatcher'
 import { Action, ActionModel } from './types'
 import { makeDependencies } from './dependencies/makeDependencies'
@@ -29,6 +29,8 @@ import { makeRouteUrlIntent, RouteUrlIntent } from './api/intents/route-url/rout
 import Utils from './utils/utils'
 import { STORE_INTENT_KIND, StoreIntent } from './api/intents/store/store-intent'
 import { makeExternalUrlAction } from './api/intents/intent'
+import { makeServices } from './environment/services/makeServices'
+import { Service } from './environment/services'
 
 export type JetOptions = {
   runtime: WebRuntime
@@ -54,6 +56,7 @@ export class Jet {
 
   static load({
     loggerFactory,
+    context,
     metrics,
     prefetched,
     featuresCallbacks,
@@ -61,6 +64,7 @@ export class Jet {
     navigate
   }: {
     loggerFactory: LoggerFactory
+    context: Map<string, unknown>
     metrics?: Metrics
     prefetched?: Map<string, Action>
     featuresCallbacks?: FeaturesCallbacks
@@ -78,7 +82,7 @@ export class Jet {
     const actionDispatcher = new ActionDispatcher()
 
     jet = new Jet({
-      logger: loggerFactory.loggerFor(LOGGER_PREFIX_NAME),
+      logger: loggerFactory.loggerFor(CONTEXT_NAME),
       runtime,
       objectGraph,
       actionDispatcher,
@@ -86,6 +90,10 @@ export class Jet {
       prefetched,
       prefetchedIntents
     })
+
+    makeServices(jet, runtime)
+
+    context.set(CONTEXT_NAME, jet)
 
     return jet
   }
@@ -108,7 +116,7 @@ export class Jet {
       return data
     }
 
-    let message = `Jet Runtime Dispatch ${Utils.capitalizeFirstLetter(intent.$kind || '')}`
+    let message = `Runtime Dispatch ${Utils.capitalizeFirstLetter(intent.$kind || '')}`
     if (intent.$kind === STORE_INTENT_KIND) {
       message = `${message}, Function: ${(intent as StoreIntent).payload?.action || ''}`
     }
@@ -122,61 +130,6 @@ export class Jet {
       return null
     }
   }
-
-  /*
-  async onPerformAction(intent: Intent, cached: boolean = true): Promise<Action> {
-    // Prefetch cache
-    if (intent.key && this.prefetched.has(intent.key) && cached) {
-      const args = (intent.payload || {}).args || []
-      this.log.info('prefetched hit:', intent.key)
-      const action = this.prefetched.get(intent.key)
-      if (action) {
-        const func = (action! as Action).func || null
-        if (func) {
-          func(...args)
-          return Promise.resolve(action)
-        }
-      }
-    }
-
-    try {
-      return await this.metrics.asyncTime(
-        `Jet Dispatch ${Utils.capitalizeFirstLetter(intent.$kind || '')}`,
-        async () => {
-          // Map intent -> action model (simple mapping)
-          const action: ActionModel = { $kind: intent.$kind, payload: intent.payload, key: intent.key }
-          const outcome = await this.actionDispatcher.perform(action)
-
-          if (outcome === PERFORMED) {
-            this.log.info(`${intent.$kind} performed`)
-            // 返回一个特殊的占位
-            return { type: 'action', func: null }
-          }
-
-          // Handler may return a Page directly, or { page } envelope, or another action
-          if (outcome && typeof outcome === 'object') {
-            if ('type' in outcome) {
-              this.prefetched.set(intent.key!, outcome as Action)
-              return outcome as Action
-            }
-
-            return { type: 'action', func: null }
-          }
-
-          return { type: 'action', func: null }
-        }
-      )
-    } catch (err) {
-      this.log.error('perform dispatch failed', intent.$kind, err)
-      const message = err instanceof Error ? err.message : String(err ?? 'Unknown error')
-      return { type: 'error', errorMessage: message }
-    }
-  }
-
-  async perform(action: string, payload?: any, cached: boolean = true): Promise<Action> {
-    return this.onPerformAction(makeCompoundIntent(action, payload), cached)
-  }
-   */
 
   /**
    * Perform a Jet action, returning the outcome.
@@ -214,29 +167,39 @@ export class Jet {
     this.wiredActions.add(kind)
   }
 
-  // 注册 Action Handler
-  /*
-  onAction(kind: string, handler: (action: any) => Promise<any> | any) {
-    this.log.info(`[${LOGGER_PREFIX_NAME} onAction] registering handler for`, kind)
-    this.actionDispatcher.register(kind, async action => {
-      try {
-        // 执行 handler
-        const result = await handler(action)
-
-        // handler 可以返回 Page / string / void
-        if (result && typeof result === 'object' && 'type' in result) {
-          return result
-        }
-
-        return result ?? PERFORMED
-      } catch (err) {
-        this.log.error(`[${LOGGER_PREFIX_NAME} onAction] handler failed`, kind, err)
-      }
-    })
-  }
-   */
-
   get logger(): Logger {
     return this.log
   }
+
+  // 调用 service
+  services = new Proxy({} as Service, {
+    get: (_, serviceName: string) => {
+      if (serviceName === '$$typeof' || typeof serviceName === 'symbol') {
+        return undefined
+      }
+
+      const service = this.runtime.serviceWithName(serviceName)
+      if (!service) {
+        this.log.error(`Runtime Service \`${serviceName}\` not found`)
+        return undefined
+      }
+
+      return new Proxy(service, {
+        get: (target, methodName: string) => {
+          const method = (target as any)[methodName]
+
+          if (typeof method !== 'function') {
+            return method
+          }
+
+          return async (...args: any[]) => {
+            return this.metrics.asyncTime(
+              `Runtime Service \`${String(serviceName)}.${String(methodName)}\``,
+              async () => method.apply(target, args)
+            )
+          }
+        }
+      })
+    }
+  })
 }

@@ -11,7 +11,7 @@ export const MEMORY_INTENT_KIND = 'MemoryIntent' as const
 export interface MemoryIntent extends DispatcherIntent<unknown> {
   $kind: typeof MEMORY_INTENT_KIND
   key: string
-  value: string
+  value: any
 }
 
 export function isMemoryIntent(intent: DispatcherIntent<unknown>): intent is MemoryIntent {

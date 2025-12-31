@@ -12,6 +12,7 @@ export const NETWORK_INTENT_KIND = 'NetworkIntent' as const
 
 export interface NetworkIntent extends DispatcherIntent<Optional<HttpResponse>> {
   $kind: typeof NETWORK_INTENT_KIND
+  key: string
   payload: IHttpRequestProps
   fetchProps?: IHttpRequestFetchProps
 }
