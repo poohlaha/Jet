@@ -4,15 +4,31 @@
 
 ## 实现原理
 ```
+[应用启动]
+   ↓
+   ↓ startApplication(STORES, navigate, callback)
+   ↓
+Jet.dispatch(intent)                           ← 对外统一入口
+   ↓
+Jet.runtime.dispatch(intent)                   ← 核心调度   
+   ↓
+Dispatcher.dispatch(intent, objectGraph)       ← 分发到具体 controller
+   ↓
+IntentController.perform(intent, objectGraph)  ← 触发具体 controller 中的 perform 方法
+   ↓
+metrics.asyncTime                              ← 记录 dispatch 性能时间
+```
+
+```
 Jet
  ├── dispatch(intent)          ← 对外统一入口
- ├── onRoute(intent)           ← 路由专用入口
+ ├── route(intent)             ← 路由专用入口
+ ├── perform(intent)           ← 事件专用入口
  ├── onAction(kind, impl)      ← 注册 action handler
  └── runtime.dispatch(intent)  ← 核心调度
         ↓
      ActionDispatcher.perform(action)
 ```
-![](./jet.png)
 
 ## 执行过程
 1. 路由
