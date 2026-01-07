@@ -8,7 +8,6 @@ import { IHttpRequestFetchProps, IHttpRequestProps } from '../../dependencies/ne
 import { CookieIntent } from '../../api/intents/cookie/cookie-intent'
 import { MemoryIntent } from '../../api/intents/memory/memory-intent'
 import { StorageIntent } from '../../api/intents/storage/storage-intent'
-import { StorePayload } from '../../api/intents/store/store-intent'
 
 export interface Service {
   NetworkService: {
@@ -40,6 +39,6 @@ export interface Service {
   }
 
   StoreService: {
-    event(params: StorePayload): Promise<any>
+    [storeName: string]: any
   }
 }

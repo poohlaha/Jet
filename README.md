@@ -116,7 +116,7 @@ const Context = getContext()
 5. 使用
 ```ts
 // 路由
-Jet?.onRoute({
+Jet?.route({
     $kind: 'RouteUrlIntent',
     payload: {
         route: '/xxx',
@@ -129,4 +129,7 @@ Jet?.perform(makeFlowIntent('/xxx', {id: 'xxx'}));
 
 // 请求
 await Jet()?.services.NetworkService?.request({ id: 'xxxx' })
+
+// Stores
+await Jet?.services.StoreService.xxxStore.xxx()
 ```

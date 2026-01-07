@@ -3,7 +3,7 @@
  * @date 2025-11-10
  * @author poohlaha
  * @description
- * Jet?.onRoute({
+ * Jet?.route({
  *  $kind: 'RouteUrlIntent',
  *  url: '/',
  *  payload: {

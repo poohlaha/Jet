@@ -143,7 +143,7 @@ export class Jet {
     return outcome
   }
 
-  async onRoute(intent: RouteUrlIntent) {
+  async route(intent: RouteUrlIntent) {
     const routerResponse = await this.dispatch<RouteUrlIntent>(makeRouteUrlIntent({ ...intent }))
 
     if (routerResponse && routerResponse.action) {
@@ -178,28 +178,45 @@ export class Jet {
         return undefined
       }
 
+      const wrap = (obj: any, path: string[] = []): any => {
+        return new Proxy(obj, {
+          get: (target, methodName: string) => {
+            const method = (target as any)[methodName]
+            const name = [...path, methodName]
+
+            // 方法
+            if (typeof method === 'function') {
+              return async (...args: any[]) => {
+                return this.metrics.asyncTime(
+                  `Runtime Service \`${String(serviceName)}.${String(methodName)}\``,
+                  async () => method.apply(target, args)
+                )
+              }
+            }
+
+            // 对象
+            if (typeof method === 'object' && method !== null) {
+              return wrap(method, name)
+            }
+
+            return method
+          }
+        })
+      }
+
+      // StoreService
+      if (serviceName === 'StoreService') {
+        const stores = this.objectGraph.treatmentStore
+        return wrap(stores, ['StoreService'])
+      }
+
       const service = this.runtime.serviceWithName(serviceName)
       if (!service) {
         this.log.error(`Runtime Service \`${serviceName}\` not found`)
         return undefined
       }
 
-      return new Proxy(service, {
-        get: (target, methodName: string) => {
-          const method = (target as any)[methodName]
-
-          if (typeof method !== 'function') {
-            return method
-          }
-
-          return async (...args: any[]) => {
-            return this.metrics.asyncTime(
-              `Runtime Service \`${String(serviceName)}.${String(methodName)}\``,
-              async () => method.apply(target, args)
-            )
-          }
-        }
-      })
+      return wrap(service)
     }
   })
 }

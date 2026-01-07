@@ -45,10 +45,9 @@ export class WebRuntime extends LegacyRuntime {
               // validation.recordValidationIncidents(value);
               return value
             })
-          } else {
-            // validation.recordValidationIncidents(returnValue);
-            return returnValue
           }
+          // validation.recordValidationIncidents(returnValue);
+          return returnValue
         }
       }
     }

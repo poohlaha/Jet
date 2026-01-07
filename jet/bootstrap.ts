@@ -32,7 +32,6 @@ import {
   CookieGetIntentController,
   CookieClearIntentController
 } from './api/controllers/cookie-controller'
-import { StoreIntentController } from './api/controllers/store-controller'
 
 function makeIntentDispatcher(): WebIntentDispatcher {
   const intentDispatcher = new WebIntentDispatcher()
@@ -63,8 +62,6 @@ function makeIntentDispatcher(): WebIntentDispatcher {
   intentDispatcher.register(CookieSetIntentController)
   intentDispatcher.register(CookieClearIntentController)
 
-  // store
-  intentDispatcher.register(StoreIntentController)
 
   return intentDispatcher
 }
