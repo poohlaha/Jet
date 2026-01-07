@@ -4,9 +4,7 @@
 
 ## 实现原理
 ```
-[应用启动]
-   ↓
-   ↓ startApplication(STORES, navigate, callback)
+startApplication(STORES, navigate, callback)   ← 应用启动
    ↓
 Jet.dispatch(intent)                           ← 对外统一入口
    ↓
