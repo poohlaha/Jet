@@ -286,12 +286,7 @@ export class Client {
   /**
    * 发送请求
    */
-  public async send(
-    props: IHttpRequestProps,
-    fetchProps?: IHttpRequestFetchProps,
-    logger?: Logger,
-    featuresCallbacks?: FeaturesCallbacks
-  ): Promise<HttpResponse> {
+  public async send(props: IHttpRequestProps, fetchProps?: IHttpRequestFetchProps, logger?: Logger, featuresCallbacks?: FeaturesCallbacks): Promise<HttpResponse> {
     // response
     let response: HttpResponse = {
       status: SUCCESS_CODE,
@@ -345,13 +340,7 @@ export class Client {
     let body = props.body || null
     let requestBody: string | Blob | FormData | ArrayBuffer | URLSearchParams = ''
     if (body !== null && body !== undefined) {
-      if (
-        body instanceof Blob ||
-        body instanceof FormData ||
-        body instanceof ArrayBuffer ||
-        body instanceof URLSearchParams ||
-        props.type === Type['CUSTOMER']
-      ) {
+      if (body instanceof Blob || body instanceof FormData || body instanceof ArrayBuffer || body instanceof URLSearchParams || props.type === Type['CUSTOMER']) {
         requestBody = body
       } else {
         requestBody = JSON.stringify(body)

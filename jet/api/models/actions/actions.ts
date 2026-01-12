@@ -14,13 +14,7 @@ export class ExternalUrlAction extends Action {
   replace: boolean = false
   navigate: boolean = false
 
-  constructor(
-    url: string = '',
-    external: boolean = false,
-    replace: boolean = false,
-    navigate: boolean = false,
-    actionMetrics: ActionMetrics = new ActionMetrics()
-  ) {
+  constructor(url: string = '', external: boolean = false, replace: boolean = false, navigate: boolean = false, actionMetrics: ActionMetrics = new ActionMetrics()) {
     super('ExternalUrlAction', actionMetrics)
     this.url = url
     this.external = external

@@ -19,16 +19,8 @@ import {
 import { setContext, setJet } from './global'
 import { bootstrap } from './bootstrap'
 
-export async function startApplication(
-  store: Record<string, any> = {},
-  navigate: (to: string) => void,
-  callback?: Function
-) {
-  console.log(
-    `🟢%c[${CONTEXT_NAME}] %cStarting application...`,
-    'color: green;font-weight:bold;',
-    'color: magenta;font-weight:bold;'
-  )
+export async function startApplication(store: Record<string, any> = {}, navigate: (to: string) => void, callback?: Function) {
+  console.log(`🟢%c[${CONTEXT_NAME}] %cStarting application...`, 'color: green;font-weight:bold;', 'color: magenta;font-weight:bold;')
 
   // 日志
   let logger: any
@@ -41,11 +33,7 @@ export async function startApplication(
     },
     consoleLogger
   )
-  logger = new CompositeLoggerFactory([
-    consoleLogger,
-    new ErrorKitLoggerFactory(errorKit),
-    ...(onyxFeatures ? [onyxFeatures.recordingLogger] : [])
-  ])
+  logger = new CompositeLoggerFactory([consoleLogger, new ErrorKitLoggerFactory(errorKit), ...(onyxFeatures ? [onyxFeatures.recordingLogger] : [])])
 
   const { jet, context } = await bootstrap({
     loggerFactory: logger,
@@ -58,6 +46,7 @@ export async function startApplication(
     navigate
   })
 
+  //@ts-ignore
   window.__JET__ = jet
 
   // 全局保存
@@ -72,9 +61,5 @@ export async function startApplication(
     logger
   })
 
-  console.log(
-    `🟢%c[${CONTEXT_NAME}] %cApplication ready`,
-    'color: green;font-weight:bold;',
-    'color: magenta;font-weight:bold;'
-  )
+  console.log(`🟢%c[${CONTEXT_NAME}] %cApplication ready`, 'color: green;font-weight:bold;', 'color: magenta;font-weight:bold;')
 }

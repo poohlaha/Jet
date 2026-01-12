@@ -175,34 +175,62 @@ export class WebClient {
     }
 
     if (ua.includes('Chrome')) {
-      return { name: 'Chrome', version: this.extractVersionInfo(ua, /Chrome\/([\d.]+)/), userAgent: ua } as Browser
+      return {
+        name: 'Chrome',
+        version: this.extractVersionInfo(ua, /Chrome\/([\d.]+)/),
+        userAgent: ua
+      } as Browser
     }
 
     if (ua.includes('Safari')) {
-      return { name: 'Safari', version: this.extractVersionInfo(ua, /Version\/([\d.]+)/), userAgent: ua } as Browser
+      return {
+        name: 'Safari',
+        version: this.extractVersionInfo(ua, /Version\/([\d.]+)/),
+        userAgent: ua
+      } as Browser
     }
 
     if (ua.includes('Firefox')) {
-      return { name: 'Firefox', version: this.extractVersionInfo(ua, /Firefox\/([\d.]+)/), userAgent: ua } as Browser
+      return {
+        name: 'Firefox',
+        version: this.extractVersionInfo(ua, /Firefox\/([\d.]+)/),
+        userAgent: ua
+      } as Browser
     }
 
-    return { name: 'Other', version: { value: '', source: 'unknown' }, userAgent: ua } as Browser
+    return {
+      name: 'Other',
+      version: { value: '', source: 'unknown' },
+      userAgent: ua
+    } as Browser
   }
 
   private parseOS(ua: string): Os {
     if (ua.includes('iPhone')) {
-      return { name: 'iOS', version: this.extractVersionInfo(ua, /CPU (?:iPhone )?OS ([\d_]+)/i) } as Os
+      return {
+        name: 'iOS',
+        version: this.extractVersionInfo(ua, /CPU (?:iPhone )?OS ([\d_]+)/i)
+      } as Os
     }
 
     if (ua.includes('iPad')) {
-      return { name: 'iPad', version: this.extractVersionInfo(ua, /CPU (?:iPhone )?OS ([\d_]+)/i) } as Os
+      return {
+        name: 'iPad',
+        version: this.extractVersionInfo(ua, /CPU (?:iPhone )?OS ([\d_]+)/i)
+      } as Os
     }
 
     if (ua.includes('Mac OS')) {
-      return { name: 'MacOS', version: this.extractVersionInfo(ua, /Mac OS X ([\d_]+)/) } as Os
+      return {
+        name: 'MacOS',
+        version: this.extractVersionInfo(ua, /Mac OS X ([\d_]+)/)
+      } as Os
     }
     if (ua.includes('Windows NT')) {
-      return { name: 'WindowsNT', version: this.extractVersionInfo(ua, /Windows NT ([\d.]+)/) }
+      return {
+        name: 'WindowsNT',
+        version: this.extractVersionInfo(ua, /Windows NT ([\d.]+)/)
+      }
     }
     if (ua.includes('Android')) {
       let name = 'Android'
@@ -214,7 +242,10 @@ export class WebClient {
         name = `Android(${deviceMatch[1].trim()})`
       }
 
-      return { name, version: this.extractVersionInfo(ua, /Android ([\d.]+)/i) } as Os
+      return {
+        name,
+        version: this.extractVersionInfo(ua, /Android ([\d.]+)/i)
+      } as Os
     }
 
     return { name: 'Other', version: { value: '', source: 'unknown' } } as Os

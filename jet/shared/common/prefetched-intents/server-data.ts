@@ -12,10 +12,7 @@ const pattern = new RegExp(`[${Object.keys(replacements).join('')}]`, 'g')
 
 export function serializeServerData(data: object): string {
   try {
-    const sanitizedData = JSON.stringify(data).replace(
-      pattern,
-      match => replacements[match as keyof typeof replacements]
-    )
+    const sanitizedData = JSON.stringify(data).replace(pattern, match => replacements[match as keyof typeof replacements])
     return `<script type="application/json" id="${SERVER_DATA_ID}">${sanitizedData}</script>`
   } catch (e) {
     return ''

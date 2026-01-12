@@ -12,7 +12,9 @@ export interface MetricsIdentifierKeyContext {
   [extra: string]: any // 允许额外扩展字段
 }
 
-export type JSONData = { [key: string]: string | number | boolean | null | JSONData | JSONData[] }
+export type JSONData = {
+  [key: string]: string | number | boolean | null | JSONData | JSONData[]
+}
 
 export class WebMetricsIdentifiers {
   private readonly sessionId: string = crypto.randomUUID()
@@ -26,8 +28,7 @@ export class WebMetricsIdentifiers {
     const fields: JSONData = { sessionId: this.sessionId }
     contexts.forEach(context => {
       // const timestamp = context.timestamp ?? Date.now()
-      fields[context.key || context.type] =
-        `${context.type}|${context.key || 'default'}|${context.userId || 'anon'}|${this.sessionId}`
+      fields[context.key || context.type] = `${context.type}|${context.key || 'default'}|${context.userId || 'anon'}|${this.sessionId}`
     })
     return fields
   }

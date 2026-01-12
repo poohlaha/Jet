@@ -12,7 +12,7 @@
  * })
  */
 import { IntentController } from '../../environment/dispatching/base/dispatcher'
-import { ROUTER_INTENT_KIND, RouteUrlIntent } from '../intents/route-url/route-url-intent'
+import {ROUTER_INTENT_KIND, RouteUrlIntent, RouteUrlPayloadIntent} from '../intents/route-url/route-url-intent'
 import { WebObjectGraph } from '../../environment/objectGraph'
 import Utils from '../../utils/utils'
 import { ExternalUrlAction } from '../models/actions/actions'
@@ -23,7 +23,7 @@ export const RouteUrlIntentController: IntentController<RouteUrlIntent> = {
   // @ts-ignore
   async perform(intent: RouteUrlIntent, objectGraph: WebObjectGraph) {
     // const targetIntent = objectGraph.router.intentFor(intent.url)
-    const payload = intent.payload || {}
+    const payload = (intent.payload || {}) as RouteUrlPayloadIntent
     let route = payload.route || ''
 
     if (Utils.isBlank(route)) {
@@ -52,8 +52,7 @@ export const RouteUrlIntentController: IntentController<RouteUrlIntent> = {
     }
 
     // 判断是不是外部链接
-    const isExternal =
-      route.startsWith('http://') || route.startsWith('https://') || (!route.startsWith('/') && route.includes('.'))
+    const isExternal = route.startsWith('http://') || route.startsWith('https://') || (!route.startsWith('/') && route.includes('.'))
 
     if (isExternal) {
       // 如果是外部 URL 但没有协议，默认加 https://
@@ -61,9 +60,15 @@ export const RouteUrlIntentController: IntentController<RouteUrlIntent> = {
         route = `https://${route}`
       }
 
-      return { intent, action: new ExternalUrlAction(route, isExternal, replace, false) }
+      return {
+        intent,
+        action: new ExternalUrlAction(route, isExternal, replace, false)
+      }
     }
 
-    return { intent, action: new ExternalUrlAction(route, false, replace, true) }
+    return {
+      intent,
+      action: new ExternalUrlAction(route, false, replace, true)
+    }
   }
 }

@@ -12,11 +12,7 @@ import { WebRuntime } from './environment/runtime'
 import { makeRouterUsingRegisteredControllers } from './environment/routing/router-factory'
 import { RouteUrlIntentController } from './api/controllers/route-url-controller'
 import { NetworkIntentController } from './api/controllers/network-controller'
-import {
-  MemoryGetIntentController,
-  MemoryRemoveIntentController,
-  MemorySetIntentController
-} from './api/controllers/memory-controller'
+import { MemoryGetIntentController, MemoryRemoveIntentController, MemorySetIntentController } from './api/controllers/memory-controller'
 import {
   LocalStorageClearIntentController,
   LocalStorageGetIntentController,
@@ -27,11 +23,7 @@ import {
   SessionStorageRemoveIntentController,
   SessionStorageSetIntentController
 } from './api/controllers/storage-controller'
-import {
-  CookieSetIntentController,
-  CookieGetIntentController,
-  CookieClearIntentController
-} from './api/controllers/cookie-controller'
+import { CookieSetIntentController, CookieGetIntentController, CookieClearIntentController } from './api/controllers/cookie-controller'
 
 function makeIntentDispatcher(): WebIntentDispatcher {
   const intentDispatcher = new WebIntentDispatcher()
@@ -61,7 +53,6 @@ function makeIntentDispatcher(): WebIntentDispatcher {
   intentDispatcher.register(CookieGetIntentController)
   intentDispatcher.register(CookieSetIntentController)
   intentDispatcher.register(CookieClearIntentController)
-
 
   return intentDispatcher
 }

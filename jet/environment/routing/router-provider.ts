@@ -15,11 +15,7 @@ export function isRouteProvider(provider: { [K: string]: any }) {
   return Optional.isSome(provider?.routes)
 }
 
-export function registerRoutesProvider(
-  router: { [K: string]: any },
-  provider: { [K: string]: any },
-  objectGraph: WebObjectGraph
-) {
+export function registerRoutesProvider(router: { [K: string]: any }, provider: { [K: string]: any }, objectGraph: WebObjectGraph) {
   provider.routes(objectGraph).forEach((definition: { [K: string]: any } = {}) => {
     router.associate(definition.rules, definition.handler)
   })

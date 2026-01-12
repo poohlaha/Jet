@@ -17,10 +17,7 @@ export type PartialSentryModule = {
 
 export type ErrorKitInstance = InstanceType<typeof ErrorKit>
 
-export const setupErrorKit = (
-  config: { [K: string]: any },
-  loggerFactory: LoggerFactory
-): ErrorKitInstance | undefined => {
+export const setupErrorKit = (config: { [K: string]: any }, loggerFactory: LoggerFactory): ErrorKitInstance | undefined => {
   if (typeof window === 'undefined') return
 
   const log = loggerFactory.loggerFor(`${CONTEXT_NAME} ErrorKit`)

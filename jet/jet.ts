@@ -150,11 +150,7 @@ export class Jet {
       return await this.perform(makeExternalUrlAction(intent.payload.route || '', { ...routerResponse }))
     }
 
-    this.log.warn(
-      'url did not resolve to a flow action with a discernable intent:',
-      intent.payload.route,
-      routerResponse
-    )
+    this.log.warn('url did not resolve to a flow action with a discernable intent:', intent.payload.route, routerResponse)
     return null
   }
 
@@ -187,10 +183,7 @@ export class Jet {
             // 方法
             if (typeof method === 'function') {
               return async (...args: any[]) => {
-                return this.metrics.asyncTime(
-                  `Runtime Service \`${String(serviceName)}.${String(methodName)}\``,
-                  async () => method.apply(target, args)
-                )
+                return this.metrics.asyncTime(`Runtime Service \`${String(serviceName)}.${String(methodName)}\``, async () => method.apply(target, args))
               }
             }
 

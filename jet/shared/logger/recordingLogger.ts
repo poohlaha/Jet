@@ -15,10 +15,7 @@ type LogRecord = {
 }
 
 export class RecordingLogger implements Logger {
-  constructor(
-    private readonly source: string,
-    private buffer: LogRecord[]
-  ) {
+  constructor(private readonly source: string, private buffer: LogRecord[]) {
     this.source = source || CONTEXT_NAME
     if (this.source.indexOf('[') === -1) {
       this.source = `[${this.source}]`

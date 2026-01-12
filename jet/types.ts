@@ -8,8 +8,19 @@ import { Jet } from './jet'
 import { LoggerFactory } from './shared/logger/logger'
 
 export type Action =
-  | { type: 'action'; func?: null | Function; result?: string; args?: Array<any> }
-  | { type: 'error'; errorMessage: string; func?: null | Function; result?: string; args?: Array<any> }
+  | {
+      type: 'action'
+      func?: null | Function
+      result?: string
+      args?: Array<any>
+    }
+  | {
+      type: 'error'
+      errorMessage: string
+      func?: null | Function
+      result?: string
+      args?: Array<any>
+    }
 
 // 外部: 路由、用户点击等
 export type Intent<T = any> = {

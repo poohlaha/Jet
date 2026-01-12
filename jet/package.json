@@ -1,0 +1,22 @@
+{
+  "name": "@bale-web/jet",
+  "version": "1.0.1",
+  "author": "poohlaha",
+  "description": "Front Jet Modal",
+  "keywords": [
+    "request",
+    "web",
+    "jet"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/poohlaha/jet.git"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
+  },
+  "scripts": {},
+  "dependencies": {},
+  "devDependencies": {}
+}

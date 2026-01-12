@@ -10,13 +10,25 @@ import { RouteUrlPayloadIntent } from '../intents/route-url/route-url-intent'
 
 // 使用工厂函数集中管理 key 的格式和 kind 的命名，避免各处字符串拼写错误；也方便将来扩展（例如自动添加 metrics tags）
 export function makeFlowIntent(route: string, payload?: any): Intent {
-  return { $kind: 'flowAction', payload: { route, ...payload }, key: `flow:${route}` }
+  return {
+    $kind: 'flowAction',
+    payload: { route, ...payload },
+    key: `flow:${route}`
+  }
 }
 
 export function makeCompoundIntent(action: string, payload?: any): Intent {
-  return { $kind: 'compoundAction', payload: { action, ...payload }, key: `compound:${action}` }
+  return {
+    $kind: 'compoundAction',
+    payload: { action, ...payload },
+    key: `compound:${action}`
+  }
 }
 
 export function makeExternalUrlAction(action: string, payload?: RouteUrlPayloadIntent): Intent {
-  return { $kind: 'ExternalUrlAction', payload: { ...payload }, key: `routeUrl:${action}` }
+  return {
+    $kind: 'ExternalUrlAction',
+    payload: { ...payload },
+    key: `routeUrl:${action}`
+  }
 }

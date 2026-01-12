@@ -42,13 +42,7 @@ export interface OnyxFeatures {
   recordingLogger: RecordingLoggerFactory
 }
 
-export function loadFeatureKit(
-  namespace: string,
-  env: Environment,
-  config: FeatureConfig,
-  logger: LoggerFactory,
-  options?: LoadFeatureKitOptions
-): OnyxFeatures {
+export function loadFeatureKit(namespace: string, env: Environment, config: FeatureConfig, logger: LoggerFactory, options?: LoadFeatureKitOptions): OnyxFeatures {
   queueMicrotask(() => {
     try {
       console.log(`%c[${CONTEXT_NAME} queueMicrotask] Executed microtask`, 'color: green;')
@@ -89,11 +83,7 @@ export function loadFeatureKit(
   }
 }
 
-export function buildRuntimeFeatureKitConfig(
-  features: Record<string, string>,
-  overrides: FeatureOverrides,
-  currentEnv: Environment
-): FeatureConfig {
+export function buildRuntimeFeatureKitConfig(features: Record<string, string>, overrides: FeatureOverrides, currentEnv: Environment): FeatureConfig {
   const config: FeatureConfig = {}
 
   for (const key in features) {
