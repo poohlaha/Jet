@@ -85,7 +85,7 @@ Jet
    })
 
    useEffect(() => {
-     startApplication(STORES, navigate, (context: Map<string, unknown>, logger: LoggerFactory) => {
+     startApplication(STORES, navigate, {}, (context: Map<string, unknown>, logger: LoggerFactory) => {
        const jet = context.get(CONTEXT_NAME) as Jet
        setAppValue({
          context,
@@ -106,7 +106,7 @@ Jet
    const navigate = useNavigate()
 
    useEffect(() => {
-     startApplication(STORES, navigate)
+     startApplication(STORES, navigate, {}, () => {})
    }, [])
    ```
 

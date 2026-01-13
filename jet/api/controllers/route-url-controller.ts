@@ -12,7 +12,7 @@
  * })
  */
 import { IntentController } from '../../environment/dispatching/base/dispatcher'
-import {ROUTER_INTENT_KIND, RouteUrlIntent, RouteUrlPayloadIntent} from '../intents/route-url/route-url-intent'
+import { ROUTER_INTENT_KIND, RouteUrlIntent, RouteUrlPayloadIntent } from '../intents/route-url/route-url-intent'
 import { WebObjectGraph } from '../../environment/objectGraph'
 import Utils from '../../utils/utils'
 import { ExternalUrlAction } from '../models/actions/actions'

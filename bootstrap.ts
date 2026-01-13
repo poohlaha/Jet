@@ -4,18 +4,20 @@
  * @author poohlaha
  * @description 把 bootstrap 中的 wiring 集中在一个文件，便于替换/测试（例如在单元测试中可以创建一个使用 mock handler 的 Jet）
  */
-import { LoggerFactory, ConsoleMetrics, FeaturesCallbacks, Jet, initializeUniqueIdContext } from './jet/export'
+import { LoggerFactory, ConsoleMetrics, FeaturesCallbacks, Jet, initializeUniqueIdContext } from '@bale-web/jet/export'
 
 export async function bootstrap({
   loggerFactory,
   featuresCallbacks,
   store,
-  navigate
+  navigate,
+  user
 }: {
   loggerFactory: LoggerFactory
   featuresCallbacks?: FeaturesCallbacks
   store: Record<string, any>
   navigate: (to: string) => void
+  user: Record<string, any>
 }) {
   // metrics
   const consoleMetrics = new ConsoleMetrics(loggerFactory)
@@ -28,7 +30,8 @@ export async function bootstrap({
     metrics: consoleMetrics,
     featuresCallbacks,
     store,
-    navigate
+    navigate,
+    user
   })
 
   initializeUniqueIdContext(context, loggerFactory)

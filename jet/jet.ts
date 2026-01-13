@@ -61,7 +61,8 @@ export class Jet {
     prefetched,
     featuresCallbacks,
     store,
-    navigate
+    navigate,
+    user
   }: {
     loggerFactory: LoggerFactory
     context: Map<string, unknown>
@@ -70,10 +71,11 @@ export class Jet {
     featuresCallbacks?: FeaturesCallbacks
     store: Record<string, any>
     navigate: (to: string) => void
+    user: Record<string, any>
   }) {
     const dependencies = makeDependencies(loggerFactory, featuresCallbacks)
 
-    const { runtime, objectGraph } = bootstrap(dependencies, store, navigate)
+    const { runtime, objectGraph } = bootstrap(dependencies, store, navigate, user)
 
     let jet: Jet
 

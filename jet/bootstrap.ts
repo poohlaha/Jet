@@ -7,7 +7,7 @@
 import { Dependencies } from './dependencies/makeDependencies'
 import { makeObjectGraph } from './environment/objectGraph'
 import { WebIntentDispatcher } from './environment/dispatching/base'
-import { DISPATCHER_TYPE, NAVIGATE_TYPE, ROUTER_TYPE, TREATMENT_STORE_TYPE } from './environment/objectGraph/types'
+import { DISPATCHER_TYPE, NAVIGATE_TYPE, ROUTER_TYPE, TREATMENT_STORE_TYPE, USER_TYPE } from './environment/objectGraph/types'
 import { WebRuntime } from './environment/runtime'
 import { makeRouterUsingRegisteredControllers } from './environment/routing/router-factory'
 import { RouteUrlIntentController } from './api/controllers/route-url-controller'
@@ -24,6 +24,7 @@ import {
   SessionStorageSetIntentController
 } from './api/controllers/storage-controller'
 import { CookieSetIntentController, CookieGetIntentController, CookieClearIntentController } from './api/controllers/cookie-controller'
+import Utils from './utils/utils'
 
 function makeIntentDispatcher(): WebIntentDispatcher {
   const intentDispatcher = new WebIntentDispatcher()
@@ -57,18 +58,22 @@ function makeIntentDispatcher(): WebIntentDispatcher {
   return intentDispatcher
 }
 
-export function bootstrap(dependencies: Dependencies, store: Record<string, any>, navigate: (to: string) => void) {
+export function bootstrap(dependencies: Dependencies, store: Record<string, any>, navigate: (to: string) => void, user: Record<string, any>) {
   const intentDispatcher = makeIntentDispatcher()
 
   const baseObjectGraph = makeObjectGraph(dependencies)
 
   const router = makeRouterUsingRegisteredControllers(intentDispatcher, baseObjectGraph)
 
-  const appObjectGraph = baseObjectGraph
+  let appObjectGraph = baseObjectGraph
     .adding(ROUTER_TYPE, router)
     .adding(DISPATCHER_TYPE, intentDispatcher)
     .adding(TREATMENT_STORE_TYPE, store || {})
     .adding(NAVIGATE_TYPE, navigate)
+
+  if (!Utils.isObjectNull(user || {})) {
+    appObjectGraph = appObjectGraph.adding(USER_TYPE, user)
+  }
 
   return {
     runtime: new WebRuntime(intentDispatcher, appObjectGraph),

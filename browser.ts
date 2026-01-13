@@ -15,11 +15,11 @@ import {
   ERROR_KIT_CONFIG,
   CONTEXT_NAME,
   Utils
-} from './jet/export'
+} from '@bale-web/jet/export'
 import { setContext, setJet } from './global'
 import { bootstrap } from './bootstrap'
 
-export async function startApplication(store: Record<string, any> = {}, navigate: (to: string) => void, callback?: Function) {
+export async function startApplication(store: Record<string, any> = {}, navigate: (to: string) => void, user: Record<string, any> = {}, callback?: Function) {
   console.log(`🟢%c[${CONTEXT_NAME}] %cStarting application...`, 'color: green;font-weight:bold;', 'color: magenta;font-weight:bold;')
 
   // 日志
@@ -43,7 +43,8 @@ export async function startApplication(store: Record<string, any> = {}, navigate
       }
     },
     store,
-    navigate
+    navigate,
+    user
   })
 
   //@ts-ignore
