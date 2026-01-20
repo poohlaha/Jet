@@ -153,4 +153,11 @@ await Jet()?.services.NetworkService?.request({ id: 'xxxx' })
 
 // Stores
 await Jet?.services.StoreService.xxxStore.xxx()
+
+// 获取页面ID
+import { AppContext } from '@/provider'
+import { getUniqueIdGenerator } from '@bale-web/jet/export'
+
+const { jet: Jet, context } = useContext(AppContext)
+const pageId = getUniqueIdGenerator(context)()
 ```

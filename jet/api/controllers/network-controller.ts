@@ -34,6 +34,11 @@ export const NetworkIntentController: IntentController<NetworkIntent> = {
 
     objectGraph.console.log('filled point data: ', data)
 
-    return (objectGraph.network as Net).once(payload || {}, intent.fetchProps || {})
+    const once = intent.once ?? true
+    if (once) {
+      return (objectGraph.network as Net).once(payload || {}, intent.fetchProps || {})
+    }
+
+    return (objectGraph.network as Net).send(payload || {}, intent.fetchProps || {})
   }
 }

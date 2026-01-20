@@ -15,6 +15,7 @@ export interface NetworkIntent extends DispatcherIntent<Optional<HttpResponse>> 
   key: string
   payload: IHttpRequestProps
   fetchProps?: IHttpRequestFetchProps
+  once?: boolean
 }
 
 export function isNetworkIntent(intent: DispatcherIntent<unknown>): intent is NetworkIntent {
