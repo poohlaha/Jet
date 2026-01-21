@@ -5,17 +5,17 @@
 ## 实现原理
 
 ```
-startApplication(STORES, navigate, callback)   ← 应用启动
+startApplication(STORES, navigate, user, callback)   ← 应用启动
    ↓
-Jet.dispatch(intent)                           ← 对外统一入口
+Jet.dispatch(intent)                                 ← 对外统一入口
    ↓
-Jet.runtime.dispatch(intent)                   ← 核心调度
+Jet.runtime.dispatch(intent)                         ← 核心调度
    ↓
-Dispatcher.dispatch(intent, objectGraph)       ← 分发到具体 controller
+Dispatcher.dispatch(intent, objectGraph)             ← 分发到具体 controller
    ↓
-IntentController.perform(intent, objectGraph)  ← 触发具体 controller 中的 perform 方法
+IntentController.perform(intent, objectGraph)        ← 触发具体 controller 中的 perform 方法
    ↓
-metrics.asyncTime                              ← 记录 dispatch 性能时间
+metrics.asyncTime                                    ← 记录 dispatch 性能时间
 ```
 
 ```
