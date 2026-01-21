@@ -113,8 +113,8 @@ Jet
 3. 在 `ReactContext` 中获取 `jet` 和 `context`
 
 ```tsx
-import { AppProvider } from '../provider'
-import { getUniqueIdGenerator } from './jet/export'
+import { AppContext } from '../provider'
+import { getUniqueIdGenerator } from '@bale-web/jet/export'
 
 const { jet: Jet, context } = useContext(AppContext)
 
@@ -153,11 +153,4 @@ await Jet()?.services.NetworkService?.request({ id: 'xxxx' })
 
 // Stores
 await Jet?.services.StoreService.xxxStore.xxx()
-
-// 获取页面ID
-import { AppContext } from '@/provider'
-import { getUniqueIdGenerator } from '@bale-web/jet/export'
-
-const { jet: Jet, context } = useContext(AppContext)
-const pageId = getUniqueIdGenerator(context)()
 ```
