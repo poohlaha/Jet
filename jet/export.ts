@@ -5,7 +5,7 @@
  */
 import { NetworkIntent } from './api/intents/network/network-intent'
 import { StoreIntent } from './api/intents/store/store-intent'
-import { LoggerFactory } from './shared/logger/logger'
+import { LoggerFactory, Logger } from './shared/logger/logger'
 import { ConsoleMetrics } from './environment/metrics'
 import { FeaturesCallbacks } from './dependencies/net'
 
@@ -29,7 +29,7 @@ import { CONTEXT_NAME } from './config'
 import { Jet } from './jet'
 import * as Utils from './utils/utils'
 
-export type { StoreIntent, NetworkIntent, LoggerFactory, FeaturesCallbacks, Action, ActionModel, Intent, Environment }
+export type { StoreIntent, NetworkIntent, LoggerFactory, Logger, FeaturesCallbacks, Action, ActionModel, Intent, Environment }
 
 export {
   makeFlowIntent,
