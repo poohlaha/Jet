@@ -13,13 +13,14 @@ const SERVICE_NAME = 'NetworkService'
 
 export function registerService(jet: Jet, runtime: WebRuntime) {
   runtime.exportingService(SERVICE_NAME, {
-    async request(payload: IHttpRequestProps, fetchProps?: IHttpRequestFetchProps, key: string = '', once: boolean = true) {
+    async request(payload: IHttpRequestProps, fetchProps?: IHttpRequestFetchProps, key: string = '', once: boolean = true, needFeaturesCallbacks: boolean = true) {
       return jet.dispatch<NetworkIntent>({
         $kind: 'NetworkIntent',
         payload,
         fetchProps,
         key,
-        once
+        once,
+        needFeaturesCallbacks
       })
     }
   })

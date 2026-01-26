@@ -39,14 +39,15 @@ export class Net {
    * 发送请求
    * @param props
    * @param fetchProps
+   * @param needFeaturesCallbacks
    */
   // @ts-ignore
-  public async send(props: IHttpRequestProps, fetchProps?: IHttpRequestFetchProps): Promise<HttpResponse> {
+  public async send(props: IHttpRequestProps, fetchProps: IHttpRequestFetchProps = {}, needFeaturesCallbacks: boolean = true): Promise<HttpResponse> {
     this.client = new Client()
-    return await this.client.send(props, fetchProps, this.logger, this.featuresCallbacks)
+    return await this.client.send(props, fetchProps, this.logger, needFeaturesCallbacks ? this.featuresCallbacks: undefined)
   }
 
-  public async once(props: IHttpRequestProps, fetchProps?: IHttpRequestFetchProps): Promise<any> {
+  public async once(props: IHttpRequestProps, fetchProps: IHttpRequestFetchProps = {}, needFeaturesCallbacks: boolean = true): Promise<any> {
     const data = Utils.deepCopy(props.data || {})
     delete data.requestId
 
@@ -85,7 +86,7 @@ export class Net {
         },
         fetchProps,
         this.logger,
-        this.featuresCallbacks
+          needFeaturesCallbacks ? this.featuresCallbacks: undefined
       )
     })
 
